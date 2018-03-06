@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.user.homework.AdminOptions"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_admin_options">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/app_bar_for_add" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/admin_options_edt_NewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:paddingLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:hint="Новое название группы"
+                android:inputType="textPersonName"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"/>
+
+            <Button
+                android:id="@+id/admin_options_btn_safe"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:layout_height="41dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_background"
+                android:text="Сохранить"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+
+            android:id="@+id/admin_options_set_day_of_week">
+        </Spinner>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="0 урок"
+                    android:id="@+id/admin_options_edt_0"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="1 урок"
+                    android:paddingLeft="8dp"
+                    android:id="@+id/admin_options_edt_1"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="2 урок"
+                    android:id="@+id/admin_options_edt_2"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="3 урок"
+                    android:id="@+id/admin_options_edt_3"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="4 урок"
+                    android:id="@+id/admin_options_edt_4"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="5 урок"
+                    android:id="@+id/admin_options_edt_5"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="6 урок"
+                    android:id="@+id/admin_options_edt_6"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="7 урок"
+                    android:id="@+id/admin_options_edt_7"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="8 урок"
+                    android:id="@+id/admin_options_edt_8"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:hint="9 урок"
+                    android:id="@+id/admin_options_edt_9"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

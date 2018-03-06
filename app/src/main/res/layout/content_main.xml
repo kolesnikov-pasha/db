@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.user.homework.MainActivity"
+    android:theme="@style/AlertDialog.AppCompat"
+    tools:showIn="@layout/activity_main"
+    android:background="#fafafa"
+    android:orientation="vertical">
+
+
+    <include
+        layout="@layout/app_bar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/background">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/main_prev_day"
+            android:background="@drawable/ic_keyboard_arrow_left_white_24dp"
+            android:layout_alignParentLeft="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/main_choose_date"
+            android:layout_centerHorizontal="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Понедельник"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#FFF"
+                android:id="@+id/main_day_of_week"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_date"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="22.02.2022"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/main_next_day"
+            android:background="@drawable/ic_keyboard_arrow_right_white_24dp"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textColor="@color/textColor"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="№" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:background="@drawable/accent_table_item"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_height="match_parent"
+                android:text="Предмет" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:background="@drawable/accent_table_item"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_height="match_parent"
+                android:text="Задание" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:layout_gravity="left"
+                android:textColor="@color/textColor"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="0" />
+            <TextView
+                android:layout_width="140dp"
+                android:textColor="@color/colorAccent"
+                android:layout_gravity="left"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:id="@+id/lesson0"
+                android:gravity="center_vertical"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task0"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="1" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson1"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task1"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="2" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson2"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task2"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:background="@drawable/accent_table_item"
+                android:textColor="@color/textColor"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="3" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson3"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task3"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:background="@drawable/accent_table_item"
+                android:textColor="@color/textColor"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="4" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson4"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task4"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:layout_gravity="left"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/textColor"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="5" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:id="@+id/lesson5"
+                android:gravity="center_vertical"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task5"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/textColor"
+                android:gravity="center"
+                android:text="6" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson6"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task6"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/textColor"
+                android:gravity="center"
+                android:text="7" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson7"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task7"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/textColor"
+                android:gravity="center"
+                android:text="8" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson8"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task8"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:background="@drawable/accent_table_item"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/textColor"
+                android:gravity="center"
+                android:text="9" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/tabli_item_background"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:id="@+id/lesson9"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:layout_gravity="left"
+                android:id="@+id/task9"
+                android:paddingLeft="8dp"
+                android:background="@drawable/tabli_item_background"
+                android:layout_height="match_parent"
+                android:text="" />
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/to_add_file_to_profile"/>
+
+</LinearLayout>

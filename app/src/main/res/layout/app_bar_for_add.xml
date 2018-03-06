@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/colorPrimary">
+        <ImageButton
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:visibility="invisible"
+            android:id="@+id/app_bar_for_add_back"
+            android:background="@drawable/ic_keyboard_backspace_white_24dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/add_group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="11dp"
+            android:text="Homework"
+            android:textColor="@color/colorAppBarText"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+        <ImageButton
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:id="@+id/add_bar_home"
+            android:background="@drawable/ic_home_white_24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:foregroundGravity="right"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

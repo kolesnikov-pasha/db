@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Homework</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_auth">Auth</string>
+    <string name="registration"><u>Регистрация</u></string>
+    <string name="title_activity_registration1">Registration1</string>
+    <string name="title_activity_registration2">Registration2</string>
+    <string name="title_activity_admin_options">AdminOptions</string>
+    <string name="title_activity_admin_auth">AdminAuth</string>
+    <string name="title_activity_hometasks">Hometasks</string>
+    <string name="title_activity_add_new_hometask">AddNewHometask</string>
+    <string name="title_activity_drawer">drawer</string>
+    <string name="admin_auth_message">Введите пароль администратора</string>
+    <string name="admin_auth_title">Пароль:</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="input">Войти</string>
+    <string name="close">Закрыть</string>
+    <string name="title_activity_admin_auth2">AdminAuth2</string>
+    <string name="title_activity_add_file_to_profile">AddFileToProfile</string>
+</resources>
