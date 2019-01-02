@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -9,36 +10,31 @@
         android:orientation="horizontal">
         <TextView
             android:layout_width="24dp"
-            android:layout_gravity="left"
             android:textColor="@color/colorPrimaryText"
-            android:background="@drawable/accent_table_item"
             android:padding="4dp"
             android:textStyle="bold"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="0" />
+            android:text="1"
+            android:id="@+id/txt_lesson_number"/>
         <TextView
             android:layout_width="140dp"
-            android:textColor="@color/colorAccent"
-            android:layout_gravity="left"
-            android:background="@drawable/table_item_background"
+            style="@style/PrimaryText"
             android:paddingLeft="8dp"
 
             android:layout_height="match_parent"
             android:textStyle="bold"
-            android:id="@+id/lesson"
-            android:gravity="center_vertical"
-            android:text="" />
+            android:id="@+id/txt_lesson"
+            android:text="123123"
+            android:gravity="center_vertical" />
         <TextView
             android:layout_width="match_parent"
-            android:textColor="@color/colorAccent"
+            style="@style/PrimaryText"
             android:gravity="center_vertical"
-            android:layout_gravity="left"
-            android:id="@+id/task"
-            android:background="@drawable/table_item_background"
+            android:id="@+id/txt_task"
             android:paddingLeft="8dp"
-            android:layout_height="match_parent"
-            android:text="" />
+            android:text="123123"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

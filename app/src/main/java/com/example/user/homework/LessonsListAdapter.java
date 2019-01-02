@@ -8,48 +8,47 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-/**
- * Created by olpyh on 18.02.2018.
- */
+import java.util.ArrayList;
 
 public class LessonsListAdapter extends BaseAdapter {
-    String[] lessons = new String[10];
-    Context context;
-    LayoutInflater layoutInflater;
 
-    LessonsListAdapter (String[] lessons, Context context){
-        this.context = context;
+    private ArrayList<Lesson> lessons = new ArrayList<>();
+    private Context context;
+    private LayoutInflater layoutInflater;
+
+    public ArrayList<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public LessonsListAdapter(ArrayList<Lesson> lessons, Context context) {
         this.lessons = lessons;
+        this.context = context;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return 10;
+        return lessons.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return lessons[i];
+        return lessons.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return i;
+        return lessons.get(i).getNumber();
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view != null) {
-            layoutInflater.inflate(R.layout.choose_lesson_item, viewGroup, false);
+        if (view == null){
+            view = layoutInflater.inflate(R.layout.table_row, viewGroup, false);
         }
-        ((TextView) view.findViewById(R.id.lesson_number)).setText(i);
-        if (!lessons[i].isEmpty()) ((TextView) view.findViewById(R.id.lesson_name)).setText(lessons[i]);
-        else {
-            ((TextView) view.findViewById(R.id.lesson_name)).setText("Нет урока");
-            view.findViewById(R.id.lesson_chosen).setClickable(false);
-            view.findViewById(R.id.lesson_chosen).setVisibility(View.INVISIBLE);
-        }
+        ((TextView) view.findViewById(R.id.txt_lesson_number)).setText(lessons.get(i).getNumber().toString());
+        ((TextView) view.findViewById(R.id.txt_lesson)).setText(lessons.get(i).getLesson());
+        ((TextView) view.findViewById(R.id.txt_task)).setText(lessons.get(i).getHomework());
         return view;
     }
 }
