@@ -124,7 +124,7 @@
                     android:text="Предмет не выбран"
                     android:textSize="18sp"
                     android:id="@+id/chosen_lesson_name"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="@color/colorPrimaryText"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                     android:textSize="18sp"
                     android:id="@+id/chosen_date"
                     android:layout_below="@+id/chosen_lesson_name"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="@color/colorPrimaryText"/>
 
             </RelativeLayout>
             <RelativeLayout

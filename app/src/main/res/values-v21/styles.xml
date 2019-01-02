@@ -9,7 +9,7 @@
 
     <style name="myDatePickerDialogTheme"
         parent="android:Widget.Material.DatePicker">
-        <item name="android:dayOfWeekBackground">@color/ButtonColor</item>
+        <item name="android:dayOfWeekBackground">@color/colorPrimary</item>
         <item name="android:headerBackground">@color/colorPrimary</item>
         <item name="android:colorBackground">@color/colorPrimary</item>
     </style>

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ToAddFile = findViewById(R.id.to_add_file_to_profile);
+        //ToAddFile = findViewById(R.id.to_add_file_to_profile);
         GroupName = findViewById(R.id.group_name);
         Date = findViewById(R.id.main_date);
         DayOfWeek = findViewById(R.id.main_day_of_week);
@@ -77,12 +77,12 @@ public class MainActivity extends AppCompatActivity{
         lesson[9] = (TextView) findViewById(R.id.lesson9);
 
 
-        ToAddFile.setOnClickListener(new View.OnClickListener() {
+        /*ToAddFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), AddFileToProfile.class));
             }
-        });
+        });*/
 
         reference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 

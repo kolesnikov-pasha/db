@@ -51,7 +51,7 @@ public class AddFileToProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_file_to_profile);
         edtFileName = findViewById(R.id.add_file_to_profile_edt_name);
-        add = findViewById(R.id.add_file_to_profile_btn_add);
+        //add = findViewById(R.id.add_file_to_profile_btn_add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +116,7 @@ public class AddFileToProfile extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                            reference.push().setValue(new FileModel(downloadUrl.toString(), "RandomName"));
+                            //reference.push().setValue(new FileModel(downloadUrl.toString(), "RandomName"));
                         }
                     });
                 }

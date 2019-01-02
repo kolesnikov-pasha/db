@@ -97,7 +97,7 @@ public class ProfileFileListAdapter extends BaseAdapter {
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и картинка
         ((TextView) nView.findViewById(R.id.file_item_name_of_file)).setText(p.name);
-        ((ImageView) nView.findViewById(R.id.file_item_image)).setImageResource(R.drawable.ic_home_white_24dp);
+        //((ImageView) nView.findViewById(R.id.file_item_image)).setImageResource(R.drawable.ic_home_white_24dp);
         nView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

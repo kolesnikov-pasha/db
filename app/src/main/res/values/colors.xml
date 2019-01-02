@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#616ea3</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#312f3e</color>
-    <color name="textColor">#464459</color>
-    <color name="ButtonColor">#d4d9f9</color>
-    <color name="ButtonColorDark">#9094ab</color>
-    <color name="colorAppBarText">#fafafa</color>
+    <color name="colorPrimary">#673ab7</color>
+    <color name="colorPrimaryDark">#512DA8</color>
+    <color name="colorPrimaryLight">#D1C4E9</color>
+    <color name="colorAccent">#ffca28</color>
+    <color name="colorAccentDark">#ffa000</color>
+    <color name="colorAccentLight">#ffe57f</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+    <color name="iconsColor">#FFFFFF</color>
+    <color name="colorDivider">#BDBDBD</color>
 </resources>
