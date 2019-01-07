@@ -63,7 +63,7 @@
         android:layout_below="@id/til3"
         android:layout_centerHorizontal="true"
         android:text="подтвердить email"
-        android:background="@drawable/button_background"
+        android:background="@drawable/accent_button_background"
         android:id="@+id/btn_admin_enter" />
 
 </RelativeLayout>

@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:id="@+id/qwertyuiop"
-                android:background="@drawable/background">
+                android:background="@color/colorPrimary">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -35,6 +35,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/add_layout_choose_date"
                     android:layout_centerHorizontal="true"
+
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
