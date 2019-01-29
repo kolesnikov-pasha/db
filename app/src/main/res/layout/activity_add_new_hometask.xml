@@ -106,6 +106,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="426dp"
+                android:textColor="@color/iconsColor"
                 android:background="@drawable/button_background"
                 android:text="Далее" />
         </RelativeLayout>
@@ -167,6 +168,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background"
                 android:id="@+id/add_btn_add"
+                android:textColor="@color/iconsColor"
                 android:text="Добавить задание"/>
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
