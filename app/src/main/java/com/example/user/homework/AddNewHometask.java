@@ -364,8 +364,7 @@ public class AddNewHometask extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, myMonth, dayOfMonth);
             changeDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-            adaptMain(edtDay.getText().toString().substring(0, 2) + edtDay.getText().toString()
-                    .substring(3, 5) + edtDay.getText().toString().substring(6, 10), txtDayOfWeek.getText().toString());
+            adaptMain(txtDayOfWeek.getText().toString());
         }
     };
 
@@ -407,7 +406,7 @@ public class AddNewHometask extends AppCompatActivity {
         String day = (date.substring(0, 2));
         String month = (date.substring(3, 5));
         String year = (date.substring(6, 10));
-        adaptMain(day + month + year, txtDayOfWeek.getText().toString());
+        adaptMain(txtDayOfWeek.getText().toString());
     }
 
     private void prevday(){
@@ -585,7 +584,7 @@ public class AddNewHometask extends AppCompatActivity {
         }
     }
 
-    public void adaptMain(String day, String weekDay) {
+    public void adaptMain(String weekDay) {
         reference.child(weekDay).child("0").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -701,7 +700,6 @@ public class AddNewHometask extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
     }
 
 }
