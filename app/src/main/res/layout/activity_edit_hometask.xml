@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditHometaskActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar_for_add"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Предмет не выбран"
+            android:textSize="18sp"
+            android:id="@+id/chosen_lesson_name"
+            android:textColor="@color/colorPrimaryText"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22.02.2022"
+            android:textSize="18sp"
+            android:id="@+id/chosen_date"
+            android:layout_below="@+id/chosen_lesson_name"
+            android:textColor="@color/colorPrimaryText"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/til4">
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_edt_task"
+                android:hint="Задание"/>
+        </android.support.design.widget.TextInputLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:visibility="invisible"
+            android:id="@+id/add_attachments"
+            android:background="@drawable/ic_attach_file_black_24dp"/>
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:id="@+id/add_btn_add"
+        android:textColor="@color/iconsColor"
+        android:text="Добавить задание"/>
+
+</LinearLayout>

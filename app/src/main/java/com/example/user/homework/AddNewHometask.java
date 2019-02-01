@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,18 +32,18 @@ public class AddNewHometask extends AppCompatActivity {
     DatabaseReference reference = firebaseDatabase.getReference().child(User.getUid()).child("lessonsSchedule");
     DatabaseReference TasksReference = firebaseDatabase.getReference().child(User.getUid()).child("task");
 
-    Button btnAdd;
     TextView txtDayOfWeek;
-    TextView edtDay, chosenDay, chosenLesson, GroupName;
+    TextView edtDay, chosenLesson, GroupName;
     String strLesson = "";
+    int i;
     EditText edtTask;
     Button btnNext;
     String lessonNumber = "-1";
     LinearLayout chooseDate;
     int myYear, myMonth, myDay;
     int DIALOG_DATE = 1;
-    View lesson0, lesson1, lesson2, lesson3, lesson4, lesson5, lesson6, lesson7, lesson8, lesson9;
-    ImageButton nextDay, prevDay, btnAddAttachments, btnBack, btnHome;
+    View [] lesson = new View[10];
+    ImageButton nextDay, prevDay, btnBack, btnHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class AddNewHometask extends AppCompatActivity {
                 showDialog(DIALOG_DATE);
             }
         });
-        GroupName = (TextView) findViewById(R.id.add_group_name);
+        GroupName = findViewById(R.id.add_group_name);
         reference.getParent().child("Name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -68,15 +67,6 @@ public class AddNewHometask extends AppCompatActivity {
 
             }
         });
-        btnBack = findViewById(R.id.app_bar_for_add_back);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                findViewById(R.id.choose_day_lesson).setVisibility(View.VISIBLE);
-                findViewById(R.id.add_layout).setVisibility(View.INVISIBLE);
-                btnBack.setVisibility(View.INVISIBLE);
-            }
-        });
         btnHome = findViewById(R.id.add_bar_home);
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,18 +74,17 @@ public class AddNewHometask extends AppCompatActivity {
                 startActivityForResult(new Intent(getApplicationContext(), MainActivity.class), 0);
             }
         });
-        chosenDay = findViewById(R.id.chosen_date);
         chosenLesson = findViewById(R.id.chosen_lesson_name);
-        lesson0 = findViewById(R.id.lesson_choose_0);
-        lesson1 = findViewById(R.id.lesson_choose_1);
-        lesson2 = findViewById(R.id.lesson_choose_2);
-        lesson3 = findViewById(R.id.lesson_choose_3);
-        lesson4 = findViewById(R.id.lesson_choose_4);
-        lesson5 = findViewById(R.id.lesson_choose_5);
-        lesson6 = findViewById(R.id.lesson_choose_6);
-        lesson7 = findViewById(R.id.lesson_choose_7);
-        lesson8 = findViewById(R.id.lesson_choose_8);
-        lesson9 = findViewById(R.id.lesson_choose_9);
+        lesson[0] = findViewById(R.id.lesson_choose_0);
+        lesson[1] = findViewById(R.id.lesson_choose_1);
+        lesson[2] = findViewById(R.id.lesson_choose_2);
+        lesson[3] = findViewById(R.id.lesson_choose_3);
+        lesson[4] = findViewById(R.id.lesson_choose_4);
+        lesson[5] = findViewById(R.id.lesson_choose_5);
+        lesson[6] = findViewById(R.id.lesson_choose_6);
+        lesson[7] = findViewById(R.id.lesson_choose_7);
+        lesson[8] = findViewById(R.id.lesson_choose_8);
+        lesson[9] = findViewById(R.id.lesson_choose_9);
         nextDay = findViewById(R.id.add_new_hometask_next_day);
         prevDay = findViewById(R.id.add_new_hometask_prev_day);
         nextDay.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +92,6 @@ public class AddNewHometask extends AppCompatActivity {
             public void onClick(View view) {
                 nextday();
                 update();
-                chosenDay.setText(edtDay.getText());
                 unchecked();
                 lessonNumber = "-1";
             }
@@ -114,7 +102,6 @@ public class AddNewHometask extends AppCompatActivity {
                 prevday();
                 update();
                 unchecked();
-                chosenDay.setText(edtDay.getText());
                 lessonNumber = "-1";
             }
         });
@@ -124,13 +111,13 @@ public class AddNewHometask extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                findViewById(R.id.choose_day_lesson).setVisibility(View.INVISIBLE);
-                findViewById(R.id.add_layout).setVisibility(View.VISIBLE);
-                btnBack.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(getApplicationContext(), EditHometaskActivity.class);
+                intent.putExtra("Lesson", "");
+                intent.putExtra("Day", "");
+                intent.putExtra("Lesson number", 0);
+                startActivity(intent);
             }
         });
-
-        btnAdd = (Button) findViewById(R.id.add_btn_add);
         edtTask = (EditText) findViewById(R.id.add_edt_task);
         Calendar calendar = Calendar.getInstance();
         myDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -138,211 +125,27 @@ public class AddNewHometask extends AppCompatActivity {
         myYear = calendar.get(Calendar.YEAR);
         changeDate(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
         changeDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-        btnAddAttachments = (ImageButton) findViewById(R.id.add_attachments);
-        btnAddAttachments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, 1);
-            }
-        });
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String day = edtDay.getText().toString();
-                day = day.substring(0, 2) + day.substring(3, 5) + day.substring(6, 10);
-                String task = edtTask.getText().toString();
-                if (lessonNumber.equals("-1")) Toast.makeText(getApplicationContext(), "Предмет не выбран", Toast.LENGTH_SHORT).show();
-                else {
-                    TasksReference.child(day).child(lessonNumber).setValue(task);
-                    Toast.makeText(getApplicationContext(), "Задание добавлено", Toast.LENGTH_SHORT).show();
-                    startActivityForResult(new Intent(getApplicationContext(), MainActivity.class), 0);
-                }
-            }
-        });
+
         update();
-        ((CheckBox) lesson0.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson0.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson0.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "0";
-                    strLesson = ((TextView)lesson0.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
+        for (i = 0; i < 10; i++) {
+            (lesson[i].findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if ( i >= 0 && i < 10 && ((CheckBox) lesson[i].findViewById(R.id.lesson_chosen)).isChecked()){
+                        unchecked();
+                        ((CheckBox) lesson[i].findViewById(R.id.lesson_chosen)).setChecked(true);
+                        lessonNumber = String.valueOf(i);
+                        strLesson = ((TextView)lesson[i].findViewById(R.id.lesson_name)).getText().toString();
+                    }
+                    else{
+                        strLesson = "Предмет не выбран";
+                        lessonNumber = "-1";
+                    }
 
-            }
-        });
-        ((CheckBox) lesson1.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson1.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson1.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "1";
-                    strLesson = ((TextView)lesson1.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
                 }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson2.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson2.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson2.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "2";
-                    strLesson = ((TextView)lesson2.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson3.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson3.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson3.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "3";
-                    strLesson = ((TextView)lesson3.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson4.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson4.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson4.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "4";
-                    strLesson = ((TextView)lesson4.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson5.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson5.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson5.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "5";
-                    strLesson = ((TextView)lesson5.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson6.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson6.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson6.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "6";
-                    strLesson = ((TextView)lesson6.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson7.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson7.findViewById(R.id.lesson_chosen)).isChecked()) {
-                    unchecked();
-                    ((CheckBox) lesson7.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "7";
-                    strLesson = ((TextView)lesson7.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else{
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson8.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson8.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson8.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "8";
-                    strLesson = ((TextView)lesson8.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else {
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-
-            }
-        });
-        ((CheckBox) lesson9.findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) lesson9.findViewById(R.id.lesson_chosen)).isChecked()){
-                    unchecked();
-                    ((CheckBox) lesson9.findViewById(R.id.lesson_chosen)).setChecked(true);
-                    lessonNumber = "9";
-                    strLesson = ((TextView)lesson9.findViewById(R.id.lesson_name)).getText().toString();
-                    chosenLesson.setText(strLesson);
-                }
-                else {
-                    strLesson = "Предмет не выбран";
-                    chosenLesson.setText(strLesson);
-                    lessonNumber = "-1";
-                }
-            }
-        });
-        chosenDay.setText(edtDay.getText());
+            });
+        }
     }
 
     protected Dialog onCreateDialog(int id){
@@ -369,39 +172,17 @@ public class AddNewHometask extends AppCompatActivity {
     };
 
     private void unchecked(){
-        ((CheckBox)lesson0.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson1.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson2.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson3.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson4.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson5.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson6.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson7.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson8.findViewById(R.id.lesson_chosen)).setChecked(false);
-        ((CheckBox)lesson9.findViewById(R.id.lesson_chosen)).setChecked(false);
+        for (int j = 0; j < 10; j++) {
+            ((CheckBox)lesson[j].findViewById(R.id.lesson_chosen)).setChecked(false);
+        }
     }
 
     private void update(){
-        ((TextView)lesson0.findViewById(R.id.lesson_number)).setText("0.");
-        ((TextView)lesson1.findViewById(R.id.lesson_number)).setText("1.");
-        ((TextView)lesson2.findViewById(R.id.lesson_number)).setText("2.");
-        ((TextView)lesson3.findViewById(R.id.lesson_number)).setText("3.");
-        ((TextView)lesson4.findViewById(R.id.lesson_number)).setText("4.");
-        ((TextView)lesson5.findViewById(R.id.lesson_number)).setText("5.");
-        ((TextView)lesson6.findViewById(R.id.lesson_number)).setText("6.");
-        ((TextView)lesson7.findViewById(R.id.lesson_number)).setText("7.");
-        ((TextView)lesson8.findViewById(R.id.lesson_number)).setText("8.");
-        ((TextView)lesson9.findViewById(R.id.lesson_number)).setText("9.");
-        ((TextView)lesson0.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson1.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson2.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson3.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson4.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson5.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson6.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson7.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson8.findViewById(R.id.lesson_name)).setText("");
-        ((TextView)lesson9.findViewById(R.id.lesson_name)).setText("");
+        for (int j = 0; j < 10; j++) {
+            ((TextView)lesson[j].findViewById(R.id.lesson_number)).setText("0.");
+            ((TextView)lesson[j].findViewById(R.id.lesson_name)).setText("");
+
+        }
         String date = edtDay.getText().toString();
         String day = (date.substring(0, 2));
         String month = (date.substring(3, 5));
@@ -584,117 +365,24 @@ public class AddNewHometask extends AppCompatActivity {
         }
     }
 
+    int j = 0;
+
     public void adaptMain(String weekDay) {
-        reference.child(weekDay).child("0").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson0.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
+        for (j = 0; j < 10; j++) {
+            reference.child(weekDay).child(String.valueOf(j)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (j < 10 && j >= 0) {
+                        ((TextView) lesson[j].findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
+                    }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-        reference.child(weekDay).child("1").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson1.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("2").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson2.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("3").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson3.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("4").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson4.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("5").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson5.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("6").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson6.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("7").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson7.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("8").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson8.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        reference.child(weekDay).child("9").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)lesson9.findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override

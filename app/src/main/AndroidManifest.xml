@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.homework">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -50,7 +52,8 @@
         <activity
             android:name=".AddFileToProfile"
             android:label="@string/title_activity_add_file_to_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EditHometaskActivity"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>
