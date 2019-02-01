@@ -3,6 +3,7 @@ package com.example.user.homework;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +24,7 @@ public class EditHometaskActivity extends AppCompatActivity {
     ImageButton btnBack, btnAddAttachments;
     String task, day;
     EditText edtHometask;
-    TextView txtLesson;
+    TextView txtLesson, txtDate;
     int number;
     Button btnAdd;
 
@@ -35,10 +36,17 @@ public class EditHometaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_hometask);
         edtHometask = findViewById(R.id.add_edt_task);
         txtLesson = findViewById(R.id.chosen_lesson_name);
-        String lesson = savedInstanceState.getString("Lesson");
-        day = savedInstanceState.getString("Day");
-        number = savedInstanceState.getInt("Lesson number");
+        txtDate = findViewById(R.id.chosen_date);
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        String lesson = bundle.getString("Lesson");
+        day = bundle.getString("Day");
+        number = bundle.getInt("Lesson number");
+        txtDate.setText(day);
+        day = day.substring(0, 2) + day.substring(3, 5) + day.substring(6, 10);
         txtLesson.setText(lesson);
+        Log.e("DAY", day);
+        Log.e("NUMBER", number + "");
         reference = reference.child("task").child(day).child(String.valueOf(number));
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -72,7 +80,6 @@ public class EditHometaskActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         btnAddAttachments = (ImageButton) findViewById(R.id.add_attachments);
         btnAddAttachments.setOnClickListener(new View.OnClickListener() {

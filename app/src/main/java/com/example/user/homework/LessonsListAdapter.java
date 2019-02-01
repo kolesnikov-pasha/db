@@ -1,26 +1,36 @@
 package com.example.user.homework;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class LessonsListAdapter extends BaseAdapter {
 
-    private ArrayList<Lesson> lessons = new ArrayList<>();
+    private ArrayList<Lesson> lessons;
+
+
+    private String day = "";
     private Context context;
     private LayoutInflater layoutInflater;
 
-    public ArrayList<Lesson> getLessons() {
+    ArrayList<Lesson> getLessons() {
         return lessons;
     }
 
-    public LessonsListAdapter(ArrayList<Lesson> lessons, Context context) {
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    LessonsListAdapter(ArrayList<Lesson> lessons, Context context) {
         this.lessons = lessons;
         this.context = context;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -49,6 +59,19 @@ public class LessonsListAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.txt_lesson_number)).setText(lessons.get(i).getNumber().toString());
         ((TextView) view.findViewById(R.id.txt_lesson)).setText(lessons.get(i).getLesson());
         ((TextView) view.findViewById(R.id.txt_task)).setText(lessons.get(i).getHomework());
+        final int x = i;
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Intent intent = new Intent(context, EditHometaskActivity.class);
+                intent.putExtra("Lesson", lessons.get(x).getLesson());
+                intent.putExtra("Lesson number", lessons.get(x).getNumber());
+                intent.putExtra("Day", day);
+                Log.e("DAY_ADAPTER", day);
+                context.startActivity(intent);
+                return false;
+            }
+        });
         return view;
     }
 }

@@ -38,12 +38,12 @@ public class AddNewHometask extends AppCompatActivity {
     int i;
     EditText edtTask;
     Button btnNext;
-    String lessonNumber = "-1";
+    int lessonNumber = -1;
     LinearLayout chooseDate;
     int myYear, myMonth, myDay;
     int DIALOG_DATE = 1;
     View [] lesson = new View[10];
-    ImageButton nextDay, prevDay, btnBack, btnHome;
+    ImageButton nextDay, prevDay, btnHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class AddNewHometask extends AppCompatActivity {
                 nextday();
                 update();
                 unchecked();
-                lessonNumber = "-1";
+                lessonNumber = -1;
             }
         });
         prevDay.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +102,7 @@ public class AddNewHometask extends AppCompatActivity {
                 prevday();
                 update();
                 unchecked();
-                lessonNumber = "-1";
+                lessonNumber = -1;
             }
         });
         txtDayOfWeek = findViewById(R.id.add_new_hometask_day_of_week);
@@ -112,9 +112,9 @@ public class AddNewHometask extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EditHometaskActivity.class);
-                intent.putExtra("Lesson", "");
-                intent.putExtra("Day", "");
-                intent.putExtra("Lesson number", 0);
+                intent.putExtra("Lesson", strLesson);
+                intent.putExtra("Day", edtDay.getText());
+                intent.putExtra("Lesson number", lessonNumber);
                 startActivity(intent);
             }
         });
@@ -129,20 +129,14 @@ public class AddNewHometask extends AppCompatActivity {
 
         update();
         for (i = 0; i < 10; i++) {
-            (lesson[i].findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
+            final int x = i;
+            (lesson[x].findViewById(R.id.lesson_chosen)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if ( i >= 0 && i < 10 && ((CheckBox) lesson[i].findViewById(R.id.lesson_chosen)).isChecked()){
-                        unchecked();
-                        ((CheckBox) lesson[i].findViewById(R.id.lesson_chosen)).setChecked(true);
-                        lessonNumber = String.valueOf(i);
-                        strLesson = ((TextView)lesson[i].findViewById(R.id.lesson_name)).getText().toString();
-                    }
-                    else{
-                        strLesson = "Предмет не выбран";
-                        lessonNumber = "-1";
-                    }
-
+                    unchecked();
+                    ((CheckBox) lesson[x].findViewById(R.id.lesson_chosen)).setChecked(true);
+                    lessonNumber = x;
+                    strLesson = ((TextView)lesson[x].findViewById(R.id.lesson_name)).getText().toString();
                 }
             });
         }
@@ -179,14 +173,10 @@ public class AddNewHometask extends AppCompatActivity {
 
     private void update(){
         for (int j = 0; j < 10; j++) {
-            ((TextView)lesson[j].findViewById(R.id.lesson_number)).setText("0.");
+            ((TextView)lesson[j].findViewById(R.id.lesson_number)).setText(j + ".");
             ((TextView)lesson[j].findViewById(R.id.lesson_name)).setText("");
 
         }
-        String date = edtDay.getText().toString();
-        String day = (date.substring(0, 2));
-        String month = (date.substring(3, 5));
-        String year = (date.substring(6, 10));
         adaptMain(txtDayOfWeek.getText().toString());
     }
 
@@ -369,12 +359,11 @@ public class AddNewHometask extends AppCompatActivity {
 
     public void adaptMain(String weekDay) {
         for (j = 0; j < 10; j++) {
-            reference.child(weekDay).child(String.valueOf(j)).addValueEventListener(new ValueEventListener() {
+            final int x = j;
+            reference.child(weekDay).child(String.valueOf(x)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (j < 10 && j >= 0) {
-                        ((TextView) lesson[j].findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
-                    }
+                    ((TextView) lesson[x].findViewById(R.id.lesson_name)).setText(dataSnapshot.getValue(String.class));
                 }
 
                 @Override

@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,7 +27,7 @@ import java.util.TreeSet;
 
 class Lesson implements Comparable<Lesson>{
     Integer number;
-    String lesson, homework;
+    private String lesson, homework;
 
     public Integer getNumber() {
         return number;
@@ -39,11 +37,11 @@ class Lesson implements Comparable<Lesson>{
         this.number = number;
     }
 
-    public String getLesson() {
+    String getLesson() {
         return lesson;
     }
 
-    public void setLesson(String lesson) {
+    void setLesson(String lesson) {
         this.lesson = lesson;
     }
 
@@ -92,7 +90,6 @@ public class MainActivity extends AppCompatActivity{
         btnAdd = findViewById(R.id.app_bar_add);
         btnEdit = findViewById(R.id.app_bar_edit);
 
-
         lessonsList.setAdapter(new LessonsListAdapter(lessonArrayList, getApplicationContext()));
 
         reference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -110,6 +107,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivityForResult(new Intent(getApplicationContext(), AdminAuth.class), 0);
             }
         });
+
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,11 +115,10 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
         nextDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextday();
+                nextDay();
                 String date = Date.getText().toString();
                 String dayOfWeek = DayOfWeek.getText().toString();
                 date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
@@ -134,7 +131,7 @@ public class MainActivity extends AppCompatActivity{
         prevDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prevday();
+                prevDay();
                 String date = Date.getText().toString();
                 String dayOfWeek = DayOfWeek.getText().toString();
                 date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
@@ -192,7 +189,7 @@ public class MainActivity extends AppCompatActivity{
         }
     };
 
-    private void nextday(){
+    private void nextDay(){
         String date = Date.getText().toString();
         Integer day = Integer.valueOf(date.substring(0, 2));
         Integer month = Integer.valueOf(date.substring(3, 5));
@@ -303,7 +300,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    private void prevday(){
+    private void prevDay(){
         String date = Date.getText().toString();
         Integer day = Integer.valueOf(date.substring(0, 2));
         Integer month = Integer.valueOf(date.substring(3, 5));
@@ -369,6 +366,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void adaptMain(String day, String weekDay){
         lessons.clear();
+        ((LessonsListAdapter) lessonsList.getAdapter()).setDay(day.substring(0, 2) + "." + day.substring(2, 4) + "." + day.substring(4, 8));
         ((LessonsListAdapter) lessonsList.getAdapter()).getLessons().clear();
         ((LessonsListAdapter) lessonsList.getAdapter()).notifyDataSetChanged();
         for (int i = 0; i < 10; i++) {
