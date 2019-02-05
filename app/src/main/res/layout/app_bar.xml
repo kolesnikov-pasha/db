@@ -15,6 +15,18 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"/>
 
+            <ImageButton
+                android:id="@+id/add_bar_auht"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_alignRight="@+id/app_bar_add"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="46dp"
+                android:layout_marginRight="84dp"
+                android:layout_toStartOf="@+id/app_bar_add"
+                android:background="@drawable/ic_home_white_24dp"
+                android:foregroundGravity="right" />
+
             <TextView
                 android:id="@+id/group_name"
                 android:layout_width="wrap_content"

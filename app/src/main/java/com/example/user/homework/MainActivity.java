@@ -62,7 +62,7 @@ class Lesson implements Comparable<Lesson>{
 public class MainActivity extends AppCompatActivity{
 
 
-    ImageButton nextDay, prevDay;
+    ImageButton nextDay, prevDay, authScrin;
     TextView DayOfWeek, Date, GroupName;
     ImageView btnEdit, btnAdd;
     LinearLayout chooseDate;
@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity{
         Date = findViewById(R.id.main_date);
         DayOfWeek = findViewById(R.id.main_day_of_week);
 
+        authScrin = findViewById(R.id.add_bar_auht);
         nextDay = findViewById(R.id.main_next_day);
         prevDay = findViewById(R.id.main_prev_day);
         chooseDate = findViewById(R.id.main_choose_date);
@@ -98,6 +99,14 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 showDialog(DIALOG_DATE);
+            }
+        });
+
+        authScrin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), AuthActivity.class));
             }
         });
 
