@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,13 +10,99 @@
     android:background="#fafafa"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_main"/>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"/>
+    <include
+        layout="@layout/app_bar" />
 
-</android.support.v4.widget.DrawerLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/main_prev_day"
+            android:background="@drawable/ic_keyboard_arrow_left_white_24dp"
+            android:layout_alignParentLeft="true" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/main_choose_date"
+            android:layout_centerHorizontal="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Понедельник"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#FFF"
+                android:id="@+id/main_day_of_week"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_date"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="22.02.2022"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/main_next_day"
+            android:background="@drawable/ic_keyboard_arrow_right_white_24dp"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/main_table"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="24dp"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textColor="@color/colorPrimaryText"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="№" />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryText"
+                android:gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:text="Предмет" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryText"
+                android:gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:text="Задание" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_lessons_main">
+    </ListView>
+
+
+</LinearLayout>
