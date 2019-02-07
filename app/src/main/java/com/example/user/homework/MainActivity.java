@@ -1,11 +1,17 @@
 package com.example.user.homework;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Dialog;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuItemImpl;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -26,7 +32,7 @@ import java.util.Calendar;
 import java.util.TreeSet;
 
 class Lesson implements Comparable<Lesson>{
-    Integer number;
+    private Integer number;
     private String lesson, homework;
 
     public Integer getNumber() {
@@ -62,34 +68,62 @@ class Lesson implements Comparable<Lesson>{
 public class MainActivity extends AppCompatActivity{
 
 
-    ImageButton nextDay, prevDay, authScrin;
+    ImageButton nextDay, prevDay;
     TextView DayOfWeek, Date, GroupName;
-    ImageView btnEdit, btnAdd;
     LinearLayout chooseDate;
     int myYear, myMonth, myDay;
     int DIALOG_DATE = 1;
     ListView lessonsList;
 
+
     DatabaseReference reference;
     TreeSet<Lesson> lessons = new TreeSet<>();
     ArrayList<Lesson> lessonArrayList = new ArrayList<>();
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Intent intent = new Intent(getApplicationContext(), AdminAuth.class);
+                switch (menuItem.getItemId()){
+                    case R.id.menu_add: {
+                        intent.putExtra("Next", 1);
+                        startActivityForResult(intent, 0);
+                        break;
+                    }
+                    case R.id.menu_edit: {
+                        intent.putExtra("Next", 2);
+                        startActivityForResult(intent, 0);
+                        break;
+                    }
+                    case R.id.menu_account_settings: {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
         lessonsList = findViewById(R.id.list_lessons_main);
-        GroupName = findViewById(R.id.group_name);
+        GroupName = findViewById(R.id.txt_name);
         Date = findViewById(R.id.main_date);
         DayOfWeek = findViewById(R.id.main_day_of_week);
 
-        authScrin = findViewById(R.id.add_bar_auht);
         nextDay = findViewById(R.id.main_next_day);
         prevDay = findViewById(R.id.main_prev_day);
         chooseDate = findViewById(R.id.main_choose_date);
-        btnAdd = findViewById(R.id.app_bar_add);
-        btnEdit = findViewById(R.id.app_bar_edit);
 
         lessonsList.setAdapter(new LessonsListAdapter(lessonArrayList, getApplicationContext()));
 
@@ -99,28 +133,6 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 showDialog(DIALOG_DATE);
-            }
-        });
-
-        authScrin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-            }
-        });
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(), AdminAuth.class), 0);
-            }
-        });
-
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(), AdminAuth2.class), 0);
             }
         });
 
@@ -154,7 +166,7 @@ public class MainActivity extends AppCompatActivity{
         reference.child("Name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GroupName.setText(dataSnapshot.getValue(String.class));
+                ((TextView)navigationView.getHeaderView(0).findViewById(R.id.txt_name)).setText(dataSnapshot.getValue(String.class));
             }
 
             @Override
@@ -311,9 +323,9 @@ public class MainActivity extends AppCompatActivity{
 
     private void prevDay(){
         String date = Date.getText().toString();
-        Integer day = Integer.valueOf(date.substring(0, 2));
-        Integer month = Integer.valueOf(date.substring(3, 5));
-        Integer year = Integer.valueOf(date.substring(6, 10));
+        int day = Integer.parseInt(date.substring(0, 2));
+        int month = Integer.parseInt(date.substring(3, 5));
+        int year = Integer.parseInt(date.substring(6, 10));
         switch (month){
             case 5:
             case 7:

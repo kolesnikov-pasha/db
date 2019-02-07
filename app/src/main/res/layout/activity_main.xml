@@ -10,7 +10,7 @@
     android:background="#fafafa"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_main"/>
+    <include layout="@layout/content_main"/>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

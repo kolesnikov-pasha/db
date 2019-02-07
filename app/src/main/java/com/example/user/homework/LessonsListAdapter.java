@@ -63,10 +63,11 @@ public class LessonsListAdapter extends BaseAdapter {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Intent intent = new Intent(context, EditHometaskActivity.class);
+                Intent intent = new Intent(context, AdminAuth.class);
                 intent.putExtra("Lesson", lessons.get(x).getLesson());
                 intent.putExtra("Lesson number", lessons.get(x).getNumber());
                 intent.putExtra("Day", day);
+                intent.putExtra("Next", 3);
                 Log.e("DAY_ADAPTER", day);
                 context.startActivity(intent);
                 return false;
