@@ -1,8 +1,11 @@
 package com.example.user.homework;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,17 +19,29 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class AdminAuth extends AppCompatActivity {
 
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Admin").child("Password");
+    SharedPreferences sharedPreferences;
+
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+            .child("Admin").child("Password");
 
     EditText edtPassword;
     Button btnInput;
     String realPass = "", in = "";
     int next = 0;
 
-    void logining(){
+    void logining() {
         if (realPass.equals(in)){
+            sharedPreferences = getPreferences(MODE_PRIVATE);
+            sharedPreferences.edit().putString("PASS", realPass).apply();
             startActivity(to);
         }
         else {
@@ -36,7 +51,9 @@ public class AdminAuth extends AppCompatActivity {
     }
 
     void ready(){
-        if (!in.isEmpty()) logining();
+        if (!in.isEmpty()) {
+            logining();
+        }
     }
 
     void waiting(String input){
@@ -49,6 +66,15 @@ public class AdminAuth extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_auth);
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        if (sharedPreferences.contains("PASS")) {
+            in = sharedPreferences.getString("PASS", "");
+            waiting(in);
+
+        }
+        else {
+            in = "";
+        }
         Intent intent = getIntent();
         next = intent.getExtras().getInt("Next");
         switch (next) {
@@ -81,7 +107,7 @@ public class AdminAuth extends AppCompatActivity {
             }
         });
         edtPassword = findViewById(R.id.adminpasswordinput_edt_Password);
-        edtPassword.setText(GlobalValues.AdminPassword);
+        edtPassword.setText(in);
         btnInput = findViewById(R.id.adminpasswordinput_btn_confirm_password);
         btnInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +116,7 @@ public class AdminAuth extends AppCompatActivity {
                     waiting(edtPassword.getText().toString());
                 }
                 else {
+                    in = edtPassword.getText().toString();
                     logining();
                 }
             }

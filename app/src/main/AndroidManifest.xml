@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="MainActivity"
+            android:label="Домашнее задание"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Registration1"
