@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="MainActivity"
+            android:label="Домашнее задание"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Registration1"
@@ -46,14 +46,12 @@
             android:label="@string/title_activity_add_new_hometask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AdminAuth2"
-            android:label="@string/title_activity_admin_auth2"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".AddFileToProfile"
             android:label="@string/title_activity_add_file_to_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EditHometaskActivity"></activity>
+        <activity android:name=".EditHometaskActivity"
+            android:label="EditHometaskActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
