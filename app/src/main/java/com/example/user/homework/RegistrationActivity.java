@@ -62,16 +62,17 @@ public class RegistrationActivity extends AppCompatActivity {
         return true;
     }
 
-    void registration(String email, String password){
+    void registration(final String email, String password){
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                     String uid = auth.getCurrentUser().getUid();
-                    database.getReference().child(uid).child("userInformation")
+                    database.getReference().child("users").child(uid).child("userInformation")
                             .setValue(new User(edtName.getText().toString(),
                                     edtSurname.getText().toString()));
+                    database.getReference().child("users").child(uid).child("email").setValue(email);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 } else {
                     Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
@@ -90,14 +91,10 @@ public class RegistrationActivity extends AppCompatActivity {
         edtName = findViewById(R.id.edt_name);
         edtSurname = findViewById(R.id.edt_surname);
         edtNewPasswordAgain = findViewById(R.id.edt_password_again);
-        if (auth.getCurrentUser() != null){
-            String uid = auth.getCurrentUser().getUid();
-        }
-
+        auth.signOut();
         btnEndRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (check()) {
                     if (edtNewPassword.getText().toString().equals(edtNewPasswordAgain.getText().toString())) {
                         registration(edtEmail.getText().toString(), edtNewPassword.getText().toString());
