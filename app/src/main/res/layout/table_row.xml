@@ -1,42 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingRight="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
+            android:id="@+id/txt_lesson_number"
             android:layout_width="24dp"
-            android:textColor="@color/colorPrimaryText"
-            android:padding="4dp"
-            android:textStyle="bold"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:padding="4dp"
             android:text="1"
-            android:id="@+id/txt_lesson_number"/>
+            android:textColor="@color/colorPrimaryText"
+            android:textStyle="bold" />
+
         <TextView
-            android:layout_width="140dp"
+            android:id="@+id/txt_lesson"
             style="@style/PrimaryText"
-            android:paddingLeft="8dp"
+            android:layout_width="140dp"
 
             android:layout_height="match_parent"
-            android:textStyle="bold"
-            android:id="@+id/txt_lesson"
-            android:text="123123"
-            android:gravity="center_vertical" />
-        <TextView
-            android:layout_width="match_parent"
-            style="@style/PrimaryText"
             android:gravity="center_vertical"
-            android:id="@+id/txt_task"
             android:paddingLeft="8dp"
             android:text="123123"
-            android:layout_height="match_parent" />
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_task"
+            style="@style/PrimaryText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:text="123123" />
+
+
 
     </LinearLayout>
 
+    <ImageButton
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/baseline_edit_black_24dp"
+        android:layout_alignParentRight="true"/>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

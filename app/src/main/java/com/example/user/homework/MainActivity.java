@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     DatabaseReference reference;
+    ImageButton btnCalendar, btnBurger;
     TreeSet<Lesson> lessons = new TreeSet<>();
     ArrayList<Lesson> lessonArrayList = new ArrayList<>();
     NavigationView navigationView;
@@ -89,12 +90,25 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+
+        btnBurger = findViewById(R.id.btn_burger);
+        btnCalendar = findViewById(R.id.btn_calendar);
+        btnBurger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DIALOG_DATE);
+            }
+        });
+
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -112,8 +126,7 @@ public class MainActivity extends AppCompatActivity{
                         break;
                     }
                     case R.id.menu_account_settings: {
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+                        startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
                         break;
                     }
                 }
@@ -435,14 +448,5 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }

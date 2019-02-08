@@ -14,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/qwe">
-        <EditText android:layout_width="250dp"
-            android:layout_height="50dp"
+        <EditText
+            style="@style/PrimaryEditText"
             android:id="@+id/et_email"
             android:inputType="textEmailAddress"
             android:hint="Email"/>
@@ -30,32 +30,26 @@
         android:layout_height="wrap_content">
         <EditText
             android:id="@+id/et_password"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
+            style="@style/PrimaryEditText"
             android:hint="Пароль"
             android:inputType="textPassword"
             android:singleLine="false" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
         android:text="Авторизация"
-        android:background="@drawable/accent_button_background"
-        android:layout_centerHorizontal="true"
+        style="@style/AccentButton"
         android:layout_below="@+id/qwe1"
         android:id="@+id/btn_sign_in"/>
 
     <TextView
         android:id="@+id/btn_registration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="62dp"
         android:clickable="true"
+        style="@style/PrimaryText"
         android:text="@string/registration"
-        android:textColor="#000"
         android:textStyle="normal" />
 
 </RelativeLayout>

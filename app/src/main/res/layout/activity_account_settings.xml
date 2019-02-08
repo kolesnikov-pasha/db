@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".AccountSettingsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Изменение пароля"
+                android:layout_marginTop="12dp"
+                android:textSize="16dp"
+                style="@style/PrimaryText"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    style="@style/PrimaryEditText"
+                    android:hint="Старый пароль"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    style="@style/PrimaryEditText"
+                    android:hint="Новый пароль"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    style="@style/PrimaryEditText"
+                    android:hint="Повторите новый пароль"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="12dp"
+                android:text="Сохранить"
+                style="@style/AccentButton" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Изменение имени и фамилии"
+                style="@style/PrimaryText"
+                android:layout_marginTop="12dp"
+                android:textSize="16dp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    style="@style/PrimaryEditText"
+                    android:hint="Имя"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    style="@style/PrimaryEditText"
+                    android:hint="Фамилия"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:layout_width="120dp"
+                android:layout_marginTop="12dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Сохранить"
+                style="@style/AccentButton" />
+
+            <Button
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:text="Выйти из аккаунта"
+                android:layout_marginTop="12dp"
+                android:layout_gravity="left"
+                style="@style/PrimaryButton" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+
+</LinearLayout>

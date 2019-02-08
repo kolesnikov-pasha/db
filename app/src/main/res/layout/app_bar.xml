@@ -2,30 +2,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:id="@+id/app_bar"
+    android:layout_height="52dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="52dp"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
             android:background="@color/colorPrimaryDark">
             <ImageButton
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:id="@+id/app_bar_edit"
-                android:background="@drawable/ic_mode_edit_white_24dp"
+                android:id="@+id/btn_burger"
+                android:background="@drawable/ic_menu_black_24dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"/>
 
-            <ImageButton
-                android:id="@+id/add_bar_auht"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:layout_alignRight="@+id/app_bar_add"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="46dp"
-                android:layout_marginRight="84dp"
-                android:layout_toStartOf="@+id/app_bar_add"
-                android:background="@drawable/ic_home_white_24dp"
-                android:foregroundGravity="right" />
 
             <TextView
                 android:id="@+id/group_name"
@@ -34,18 +26,19 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:padding="11dp"
-                android:text="Homework"
+                android:text="Домашнее задание"
                 android:textColor="@color/iconsColor"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
             <ImageButton
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:id="@+id/app_bar_add"
-                android:background="@drawable/ic_add_box_white_24dp"
+                android:id="@+id/btn_calendar"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:background="@drawable/baseline_calendar_today_white_48dp"
                 android:foregroundGravity="right"/>
         </RelativeLayout>
 
