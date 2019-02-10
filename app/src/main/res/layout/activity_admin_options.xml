@@ -45,8 +45,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="6dp"
                 android:layout_marginRight="10dp"
-                android:textColor="@color/iconsColor"
-                android:background="@drawable/button_background"
+                android:textColor="@color/colorPrimaryText"
+                android:background="@drawable/accent_button_background"
                 android:text="Сохранить"
                 android:layout_alignParentRight="true" />
         </RelativeLayout>

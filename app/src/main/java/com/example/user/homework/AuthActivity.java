@@ -25,7 +25,7 @@ public class AuthActivity extends AppCompatActivity {
     private Button signIn;
     private EditText edtEmail;
     private EditText edtPassword;
-    private TextView txtRegistration;
+    private TextView txtRegistration, txtPassRemaind;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SharedPreferences sharedPreferences;
 
@@ -88,12 +88,19 @@ public class AuthActivity extends AppCompatActivity {
         signIn = findViewById(R.id.btn_sign_in);
         edtEmail = findViewById(R.id.et_email);
         edtPassword = findViewById(R.id.et_password);
+        txtPassRemaind = findViewById(R.id.txt_pass_remaind);
+        txtPassRemaind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PasswordRemaindActivity.class));
+            }
+        });
         txtRegistration = findViewById(R.id.btn_registration);
         txtRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(AuthActivity.this, Registration1.class));
-                startActivity(new Intent(AuthActivity.this, RegistrationActivity.class));
+                startActivity(new Intent(AuthActivity.this, Registration1.class));
+                //startActivity(new Intent(AuthActivity.this, RegistrationActivity.class));
             }
         });
         mAuthListener = new FirebaseAuth.AuthStateListener() {

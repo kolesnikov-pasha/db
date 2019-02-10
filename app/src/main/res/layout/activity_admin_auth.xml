@@ -20,14 +20,7 @@
         android:layout_alignLeft="@+id/adminpasswordinput_edt_Password"
         android:layout_below="@+id/adminpasswordinput_edt_Password"
         android:id="@+id/admin_auth_layout">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/admin_auth_remember_password"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Запомнить пароль"/>
+
     </LinearLayout>
 
     <Button

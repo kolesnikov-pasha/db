@@ -57,9 +57,9 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_background"
+        android:background="@drawable/accent_button_background"
         android:id="@+id/add_btn_add"
-        android:textColor="@color/iconsColor"
+        android:textColor="@color/colorPrimaryText"
         android:text="Добавить задание"/>
 
 </LinearLayout>

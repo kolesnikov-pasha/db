@@ -60,11 +60,11 @@ public class EditHometaskActivity extends AppCompatActivity {
 
             }
         });
-        btnBack = findViewById(R.id.app_bar_for_add_back);
+        btnBack = findViewById(R.id.add_bar_home);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AddNewHometask.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
         btnAdd = findViewById(R.id.add_btn_add);
