@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
 
         btnBurger = findViewById(R.id.btn_burger);
@@ -230,60 +229,14 @@ public class MainActivity extends AppCompatActivity{
     private void nextDay(){
         String date = Date.getText().toString();
         Integer day = Integer.valueOf(date.substring(0, 2));
-        Integer month = Integer.valueOf(date.substring(3, 5));
+        Integer month = Integer.valueOf(date.substring(3, 5)) - 1;
         Integer year = Integer.valueOf(date.substring(6, 10));
-        switch (month){
-            case 4:
-            case 6:
-            case 9:
-            case 11:{
-                if (day < 30) day++;
-                else{
-                    day = 1;
-                    month++;
-                }
-                break;
-            }
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 8:
-            case 10:{
-                if (day < 31) day++;
-                else{
-                    day = 1;
-                    month++;
-                }
-                break;
-            }
-            case 2: {
-                if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)){
-                    if (day < 29) day++;
-                    else {
-                        day = 1;
-                        month++;
-                    }
-                }
-                else {
-                    if (day < 28) day++;
-                    else {
-                        day = 1;
-                        month++;
-                    }
-                }
-                break;
-            }
-            case 12: {
-                if (day < 31) day++;
-                else {
-                    day = 1;
-                    month = 1;
-                    year++;
-                }
-                break;
-            }
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        month = calendar.get(Calendar.MONTH) + 1;
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        year = calendar.get(Calendar.YEAR);
         changeDate(day, month, year);
         Calendar c = Calendar.getInstance();
         c.set(year, month - 1, day);
@@ -341,60 +294,14 @@ public class MainActivity extends AppCompatActivity{
     private void prevDay(){
         String date = Date.getText().toString();
         int day = Integer.parseInt(date.substring(0, 2));
-        int month = Integer.parseInt(date.substring(3, 5));
+        int month = Integer.parseInt(date.substring(3, 5)) - 1;
         int year = Integer.parseInt(date.substring(6, 10));
-        switch (month){
-            case 5:
-            case 7:
-            case 10:
-            case 12:{
-                if (day > 1) day--;
-                else{
-                    day = 30;
-                    month--;
-                }
-                break;
-            }
-            case 2:
-            case 4:
-            case 6:
-            case 8:
-            case 9:
-            case 11:{
-                if (day > 1) day--;
-                else{
-                    day = 31;
-                    month--;
-                }
-                break;
-            }
-            case 3: {
-                if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)){
-                    if (day > 1) day--;
-                    else {
-                        day = 29;
-                        month--;
-                    }
-                }
-                else {
-                    if (day > 1) day--;
-                    else {
-                        day = 28;
-                        month--;
-                    }
-                }
-                break;
-            }
-            case 1: {
-                if (day > 1) day--;
-                else {
-                    day = 31;
-                    month = 12;
-                    year--;
-                }
-                break;
-            }
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        month = calendar.get(Calendar.MONTH) + 1;
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        year = calendar.get(Calendar.YEAR);
         changeDate(day, month, year);
         Calendar c = Calendar.getInstance();
         c.set(year, month - 1, day);
