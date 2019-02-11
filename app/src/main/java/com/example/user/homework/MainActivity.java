@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     ImageButton nextDay, prevDay;
-    TextView DayOfWeek, Date, GroupName;
+    TextView DayOfWeek, Date;
     LinearLayout chooseDate;
     int myYear, myMonth, myDay;
     int DIALOG_DATE = 1;
@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         lessonsList = findViewById(R.id.list_lessons_main);
-        GroupName = findViewById(R.id.txt_name);
         Date = findViewById(R.id.main_date);
         DayOfWeek = findViewById(R.id.main_day_of_week);
 

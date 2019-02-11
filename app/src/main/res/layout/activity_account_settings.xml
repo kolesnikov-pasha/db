@@ -29,22 +29,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/edt_change_old_pass"
                     style="@style/PrimaryEditText"
                     android:hint="Старый пароль"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edt_change_old_pass">
+                android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/edt_change_new_pass"
                     style="@style/PrimaryEditText"
                     android:hint="Новый пароль"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edt_change_new_pass">
+                android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/edt_repeat_new_pass"
                     style="@style/PrimaryEditText"
                     android:hint="Повторите новый пароль"/>
             </android.support.design.widget.TextInputLayout>

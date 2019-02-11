@@ -20,6 +20,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     Button btnEndRegistration;
@@ -71,8 +73,20 @@ public class RegistrationActivity extends AppCompatActivity {
                     String uid = auth.getCurrentUser().getUid();
                     database.getReference().child("users").child(uid).child("userInformation")
                             .setValue(new User(edtName.getText().toString(),
-                                    edtSurname.getText().toString()));
-                    database.getReference().child("users").child(uid).child("email").setValue(email);
+                                    edtSurname.getText().toString(), email, new ArrayList<Group>()));
+                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(getApplicationContext(), "На адрес " + email +
+                                        " выслано письмо для подтверждения регистрации", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(getApplicationContext(), AdminOptions.class));
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Отправить письмо для подтверждения " +
+                                        "регистрации не получилось", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 } else {
                     Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();

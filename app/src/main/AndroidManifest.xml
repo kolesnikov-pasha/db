@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".PasswordRemaindActivity"></activity>
+        <activity android:name=".CreateGroupActivity"></activity>
+        <activity android:name=".GroupsListActivity" />
+        <activity android:name=".PasswordRemaindActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity
             android:name=".AccountSettingsActivity"

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +27,6 @@ public class AuthActivity extends AppCompatActivity {
     private EditText edtEmail;
     private EditText edtPassword;
     private TextView txtRegistration, txtPassRemaind;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private SharedPreferences sharedPreferences;
 
     protected void signing(final String email, final String password){
@@ -44,12 +44,11 @@ public class AuthActivity extends AppCompatActivity {
                         user = mAuth.getCurrentUser();
                         if (user.isEmailVerified()) {
                             Toast.makeText(AuthActivity.this, "Добро пожаловать", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                            Intent intent = new Intent(AuthActivity.this, GroupsListActivity.class);
                             startActivity(intent);
                         }
                         else {
                             Toast.makeText(AuthActivity.this, "Ваш email не подтвержден, перейдите по ссылке в письме", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(), Registration2.class));
                         }
                     }else{
                         Toast.makeText(AuthActivity.this, "Ошибка входа", Toast.LENGTH_SHORT).show();
@@ -67,7 +66,7 @@ public class AuthActivity extends AppCompatActivity {
                     user = mAuth.getCurrentUser();
                     if (user.isEmailVerified()) {
                         Toast.makeText(AuthActivity.this, "Добро пожаловать", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                        Intent intent = new Intent(AuthActivity.this, GroupsListActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -77,13 +76,24 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
+        Intent from = getIntent();
+        boolean signOut = false;
+        try {
+            signOut = from.getExtras().getBoolean("SIGNOUT");
+        }
+        catch (Exception ignored) {}
+        if (signOut){
+            sharedPreferences = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("EMAIL");
+            editor.remove("PASSWORD");
+            editor.apply();
+        }
         sharedPreferences = getPreferences(MODE_PRIVATE);
         String email = sharedPreferences.getString("EMAIL", "");
         String password = sharedPreferences.getString("PASSWORD", "");
         if (!email.isEmpty() && !password.isEmpty()) defaultSigning(email, password);
-
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         signIn = findViewById(R.id.btn_sign_in);
         edtEmail = findViewById(R.id.et_email);
@@ -99,17 +109,10 @@ public class AuthActivity extends AppCompatActivity {
         txtRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AuthActivity.this, Registration1.class));
-                //startActivity(new Intent(AuthActivity.this, RegistrationActivity.class));
+                //startActivity(new Intent(AuthActivity.this, Registration1.class));
+                startActivity(new Intent(AuthActivity.this, RegistrationActivity.class));
             }
         });
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = firebaseAuth.getCurrentUser();
-
-            }
-        };
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
