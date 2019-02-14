@@ -23,12 +23,13 @@
                 android:text="Изменение пароля"
                 android:layout_marginTop="12dp"
                 android:textSize="16dp"
-                style="@style/PrimaryText"/>
+                style="@style/PrimaryText" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/edt_change_old_pass"
                     style="@style/PrimaryEditText"
                     android:hint="Старый пароль"/>
             </android.support.design.widget.TextInputLayout>
@@ -36,6 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/edt_change_new_pass"
                     style="@style/PrimaryEditText"
                     android:hint="Новый пароль"/>
             </android.support.design.widget.TextInputLayout>
@@ -43,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/edt_repeat_new_pass"
                     style="@style/PrimaryEditText"
                     android:hint="Повторите новый пароль"/>
             </android.support.design.widget.TextInputLayout>
@@ -53,7 +56,8 @@
                 android:layout_gravity="left"
                 android:layout_marginTop="12dp"
                 android:text="Сохранить"
-                style="@style/AccentButton" />
+                style="@style/AccentButton"
+                android:id="@+id/btn_change_pass"/>
 
 
             <TextView
@@ -69,6 +73,7 @@
                 android:layout_height="wrap_content">
                 <EditText
                     style="@style/PrimaryEditText"
+                    android:id="@+id/edt_change_new_name"
                     android:hint="Имя"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
@@ -76,7 +81,8 @@
                 android:layout_height="wrap_content">
                 <EditText
                     style="@style/PrimaryEditText"
-                    android:hint="Фамилия"/>
+                    android:hint="Фамилия"
+                    android:id="@+id/edt_change_new_surname"/>
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -85,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:text="Сохранить"
-                style="@style/AccentButton" />
+                style="@style/AccentButton"
+                android:id="@+id/btn_change_inf"/>
 
             <Button
                 android:layout_width="240dp"
@@ -93,7 +100,8 @@
                 android:text="Выйти из аккаунта"
                 android:layout_marginTop="12dp"
                 android:layout_gravity="left"
-                style="@style/PrimaryButton" />
+                style="@style/PrimaryButton"
+                android:id="@+id/btn_exit"/>
 
         </LinearLayout>
 
