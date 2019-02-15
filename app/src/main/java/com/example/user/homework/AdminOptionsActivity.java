@@ -29,7 +29,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class AdminOptions extends AppCompatActivity {
+public class AdminOptionsActivity extends AppCompatActivity {
 
     EditText edtChangeName;
     Button btnSafeChanges;

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,14 +101,13 @@ public class AuthActivity extends AppCompatActivity {
         txtPassRemaind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PasswordRemaindActivity.class));
+                startActivity(new Intent(getApplicationContext(), PasswordRemindActivity.class));
             }
         });
         txtRegistration = findViewById(R.id.btn_registration);
         txtRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(AuthActivity.this, Registration1.class));
                 startActivity(new Intent(AuthActivity.this, RegistrationActivity.class));
             }
         });

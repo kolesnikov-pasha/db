@@ -36,7 +36,7 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-public class AddFileToProfile extends AppCompatActivity {
+public class AddFileToProfileActivity extends AppCompatActivity {
 
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("files");
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();

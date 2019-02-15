@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
-public class AddNewHometask extends AppCompatActivity {
+public class AddNewTaskActivity extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     FirebaseUser User = FirebaseAuth.getInstance().getCurrentUser();
@@ -144,7 +143,7 @@ public class AddNewHometask extends AppCompatActivity {
 
     protected Dialog onCreateDialog(int id){
         if (id == DIALOG_DATE) {
-            return new DatePickerDialog(AddNewHometask.this, myCallBack, myYear, myMonth, myDay);
+            return new DatePickerDialog(AddNewTaskActivity.this, myCallBack, myYear, myMonth, myDay);
         }
         else
             return super.onCreateDialog(id);

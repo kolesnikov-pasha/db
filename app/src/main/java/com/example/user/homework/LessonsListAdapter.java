@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -63,7 +61,7 @@ public class LessonsListAdapter extends BaseAdapter {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Intent intent = new Intent(context, AdminAuth.class);
+                Intent intent = new Intent(context, AdminAuthActivity.class);
                 intent.putExtra("Lesson", lessons.get(x).getLesson());
                 intent.putExtra("Lesson number", lessons.get(x).getNumber());
                 intent.putExtra("Day", day);

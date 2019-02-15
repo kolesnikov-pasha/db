@@ -2,10 +2,8 @@ package com.example.user.homework;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,9 +13,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -80,7 +75,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 Toast.makeText(getApplicationContext(), "На адрес " + email +
                                         " выслано письмо для подтверждения регистрации", Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getApplicationContext(), AdminOptions.class));
+                                startActivity(new Intent(getApplicationContext(), AdminOptionsActivity.class));
                             }else{
                                 Toast.makeText(getApplicationContext(), "Отправить письмо для подтверждения " +
                                         "регистрации не получилось", Toast.LENGTH_LONG).show();

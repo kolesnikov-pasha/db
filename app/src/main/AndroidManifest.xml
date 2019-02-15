@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".CreateGroupActivity"></activity>
         <activity android:name=".GroupsListActivity" />
-        <activity android:name=".PasswordRemaindActivity" />
+        <activity android:name=".PasswordRemindActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity
             android:name=".AccountSettingsActivity"
@@ -33,27 +33,19 @@
             android:label="Домашнее задание"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Registration1"
-            android:label="@string/title_activity_registration1"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Registration2"
-            android:label="@string/title_activity_registration2"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".AdminOptions"
+            android:name=".AdminOptionsActivity"
             android:label="@string/title_activity_admin_options"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AdminAuth"
+            android:name=".AdminAuthActivity"
             android:label="@string/title_activity_admin_auth"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddNewHometask"
+            android:name=".AddNewTaskActivity"
             android:label="@string/title_activity_add_new_hometask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddFileToProfile"
+            android:name=".AddFileToProfileActivity"
             android:label="@string/title_activity_add_file_to_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

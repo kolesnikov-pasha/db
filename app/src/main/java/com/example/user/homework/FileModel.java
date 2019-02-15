@@ -1,9 +1,5 @@
 package com.example.user.homework;
 
-/**
- * Created by olpyh on 05.03.2018.
- */
-
 public class FileModel {
     String ref;
     String name;

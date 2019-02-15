@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddNewHometask"
+    tools:context=".AddNewTaskActivity"
     tools:showIn="@layout/activity_add_new_hometask"
     android:orientation="vertical">
 

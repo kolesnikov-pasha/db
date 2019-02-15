@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,13 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
-
-public class AdminAuth extends AppCompatActivity {
+public class AdminAuthActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
@@ -45,7 +36,7 @@ public class AdminAuth extends AppCompatActivity {
             startActivity(to);
         }
         else {
-            Toast.makeText(AdminAuth.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AdminAuthActivity.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
             edtPassword.setText("");
         }
     }
@@ -79,11 +70,11 @@ public class AdminAuth extends AppCompatActivity {
         next = intent.getExtras().getInt("Next");
         switch (next) {
             case 1:{
-                to = new Intent(getApplicationContext(), AddNewHometask.class);
+                to = new Intent(getApplicationContext(), AddNewTaskActivity.class);
                 break;
             }
             case 2:{
-                to = new Intent(getApplicationContext(), AdminOptions.class);
+                to = new Intent(getApplicationContext(), AdminOptionsActivity.class);
                 break;
             }
             case 3:{
