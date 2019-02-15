@@ -82,7 +82,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), GroupViewActivity.class));
                 } else {
                     Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
                 }

@@ -63,7 +63,7 @@ public class EditHometaskActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), GroupViewActivity.class));
             }
         });
         btnAdd = findViewById(R.id.add_btn_add);
@@ -75,7 +75,7 @@ public class EditHometaskActivity extends AppCompatActivity {
                 else {
                     reference.setValue(task);
                     Toast.makeText(getApplicationContext(), "Задание добавлено", Toast.LENGTH_SHORT).show();
-                    startActivityForResult(new Intent(getApplicationContext(), MainActivity.class), 0);
+                    startActivityForResult(new Intent(getApplicationContext(), GroupViewActivity.class), 0);
                 }
             }
         });

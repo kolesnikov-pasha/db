@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".GroupViewActivity"
     android:id="@+id/main_drawer_layout"
     android:theme="@style/AppTheme.NoActionBar"
     style="@style/AppTheme.NoActionBar"

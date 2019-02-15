@@ -27,7 +27,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 class Group{
-    private String name, id;
+
+    private String name = "", id = "", password = "";
+    private ArrayList<String> admin = new ArrayList<>();
+
+    public ArrayList<String> getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(ArrayList<String> admin) {
+        this.admin = admin;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getName() {
         return name;
@@ -91,7 +109,7 @@ class GroupsAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MainActivity.class);
+                Intent intent = new Intent(context, GroupViewActivity.class);
                 intent.putExtra("GROUPID", groups.get(position).getId());
                 context.startActivity(intent);
             }
@@ -131,6 +149,10 @@ public class GroupsListActivity extends AppCompatActivity {
                     }
                     case R.id.nav_settings:{
                         startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
+                        break;
+                    }
+                    case R.id.nav_add_group:{
+                        startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
                         break;
                     }
                 }

@@ -70,7 +70,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(), MainActivity.class), 0);
+                startActivityForResult(new Intent(getApplicationContext(), GroupViewActivity.class), 0);
             }
         });
         chosenLesson = findViewById(R.id.chosen_lesson_name);

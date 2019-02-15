@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -62,7 +63,7 @@ class Lesson implements Comparable<Lesson>{
     }
 }
 
-public class MainActivity extends AppCompatActivity{
+public class GroupViewActivity extends AppCompatActivity{
 
 
     ImageButton nextDay, prevDay;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity{
     int DIALOG_DATE = 1;
     ListView lessonsList;
 
-
+    String groupId = "";
     DatabaseReference reference;
     ImageButton btnCalendar, btnBurger;
     TreeSet<Lesson> lessons = new TreeSet<>();
@@ -85,6 +86,10 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Bundle from = getIntent().getExtras();
+        //assert from != null;
+        groupId = from.getString("GROUPID");
+        Log.e("ID", groupId);
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
 
         btnBurger = findViewById(R.id.btn_burger);
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity{
 
         lessonsList.setAdapter(new LessonsListAdapter(lessonArrayList, getApplicationContext()));
 
-        reference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        reference = FirebaseDatabase.getInstance().getReference().child(groupId);
 
         chooseDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +203,7 @@ public class MainActivity extends AppCompatActivity{
 
     protected Dialog onCreateDialog(int id){
         if (id == DIALOG_DATE) {
-            return new DatePickerDialog(MainActivity.this, myCallBack, myYear, myMonth, myDay);
+            return new DatePickerDialog(GroupViewActivity.this, myCallBack, myYear, myMonth, myDay);
         }
         else
             return super.onCreateDialog(id);

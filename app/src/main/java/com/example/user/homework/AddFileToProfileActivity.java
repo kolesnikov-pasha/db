@@ -51,7 +51,6 @@ public class AddFileToProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_file_to_profile);
         edtFileName = findViewById(R.id.add_file_to_profile_edt_name);
-        //add = findViewById(R.id.add_file_to_profile_btn_add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
