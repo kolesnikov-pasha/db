@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,7 +86,6 @@ public class GroupViewActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         Bundle from = getIntent().getExtras();
-        //assert from != null;
         groupId = from.getString("GROUPID");
         Log.e("ID", groupId);
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
@@ -112,23 +110,22 @@ public class GroupViewActivity extends AppCompatActivity{
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), AdminAuthActivity.class);
+                Intent intent = new Intent();
                 switch (menuItem.getItemId()){
                     case R.id.menu_add: {
-                        intent.putExtra("Next", 1);
-                        startActivityForResult(intent, 0);
+                        intent = new Intent(getApplicationContext(), AddNewTaskActivity.class);
                         break;
                     }
                     case R.id.menu_edit: {
-                        intent.putExtra("Next", 2);
-                        startActivityForResult(intent, 0);
+                        intent = new Intent(getApplicationContext(), AdminOptionsActivity.class);
                         break;
                     }
                     case R.id.menu_account_settings: {
-                        startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
-                        break;
+                        return false;
                     }
                 }
+                intent.putExtra("GROUPID", groupId);
+                startActivity(intent);
                 return false;
             }
         });
@@ -312,6 +309,7 @@ public class GroupViewActivity extends AppCompatActivity{
         lessons.clear();
         ((LessonsListAdapter) lessonsList.getAdapter()).setDay(day.substring(0, 2) + "." + day.substring(2, 4) + "." + day.substring(4, 8));
         ((LessonsListAdapter) lessonsList.getAdapter()).getLessons().clear();
+        ((LessonsListAdapter) lessonsList.getAdapter()).setGroupId(groupId);
         ((LessonsListAdapter) lessonsList.getAdapter()).notifyDataSetChanged();
         for (int i = 0; i < 10; i++) {
             final Lesson[] lesson = new Lesson[1];

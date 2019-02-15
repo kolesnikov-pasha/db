@@ -72,7 +72,7 @@ public class User implements Serializable {
             group.setId(uid);
         }
         else {
-            group.setId(uid + "(" + createCount + ")");
+            group.setId(uid + "(" + createCount + "");
         }
         createCount++;
         group.setPassword(password);

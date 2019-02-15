@@ -37,10 +37,6 @@
             android:label="@string/title_activity_admin_options"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AdminAuthActivity"
-            android:label="@string/title_activity_admin_auth"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".AddNewTaskActivity"
             android:label="@string/title_activity_add_new_hometask"
             android:theme="@style/AppTheme.NoActionBar" />

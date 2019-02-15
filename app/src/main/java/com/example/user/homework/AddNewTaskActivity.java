@@ -1,5 +1,6 @@
 package com.example.user.homework;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -14,8 +15,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,9 +26,7 @@ import java.util.Calendar;
 public class AddNewTaskActivity extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    FirebaseUser User = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference reference = firebaseDatabase.getReference().child(User.getUid()).child("lessonsSchedule");
-    DatabaseReference TasksReference = firebaseDatabase.getReference().child(User.getUid()).child("task");
+    DatabaseReference reference = firebaseDatabase.getReference();
 
     TextView txtDayOfWeek;
     TextView edtDay, chosenLesson, GroupName;
@@ -48,6 +45,9 @@ public class AddNewTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_hometask);
+        Bundle bundle = getIntent().getExtras();
+        final String groupId = bundle.getString("GROUPID");
+        reference = reference.child(groupId).child("lessonsSchedule");
         chooseDate = findViewById(R.id.add_layout_choose_date);
         chooseDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +70,9 @@ public class AddNewTaskActivity extends AppCompatActivity {
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(), GroupViewActivity.class), 0);
+                Intent intent = new Intent(getApplicationContext(), GroupViewActivity.class);
+                intent.putExtra("GROUPID", groupId);
+                startActivityForResult(intent, 0);
             }
         });
         chosenLesson = findViewById(R.id.chosen_lesson_name);
@@ -112,12 +114,13 @@ public class AddNewTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EditHometaskActivity.class);
                 intent.putExtra("Lesson", strLesson);
+                intent.putExtra("GROUPID", groupId);
                 intent.putExtra("Day", edtDay.getText());
                 intent.putExtra("Lesson number", lessonNumber);
                 startActivity(intent);
             }
         });
-        edtTask = (EditText) findViewById(R.id.add_edt_task);
+        edtTask = findViewById(R.id.add_edt_task);
         Calendar calendar = Calendar.getInstance();
         myDay = calendar.get(Calendar.DAY_OF_MONTH);
         myMonth = calendar.get(Calendar.MONTH);
@@ -170,6 +173,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void update(){
         for (int j = 0; j < 10; j++) {
             ((TextView)lesson[j].findViewById(R.id.lesson_number)).setText(j + ".");
@@ -181,13 +185,13 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
     private void prevday(){
         String date = edtDay.getText().toString();
-        Integer day = Integer.valueOf(date.substring(0, 2));
-        Integer month = Integer.valueOf(date.substring(3, 5));
-        Integer year = Integer.valueOf(date.substring(6, 10));
+        int day = Integer.parseInt(date.substring(0, 2));
+        int month = Integer.parseInt(date.substring(3, 5));
+        int year = Integer.parseInt(date.substring(6, 10));
         switch (month){
-            case 5:;
-            case 7:;
-            case 10:;
+            case 5:
+            case 7:
+            case 10:
             case 12:{
                 if (day > 1) day--;
                 else{
@@ -196,11 +200,11 @@ public class AddNewTaskActivity extends AppCompatActivity {
                 }
                 break;
             }
-            case 2:;
-            case 4:;
-            case 6:;
-            case 8:;
-            case 9:;
+            case 2:
+            case 4:
+            case 6:
+            case 8:
+            case 9:
             case 11:{
                 if (day > 1) day--;
                 else{
@@ -245,13 +249,13 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
     private void nextday(){
         String date = edtDay.getText().toString();
-        Integer day = Integer.valueOf(date.substring(0, 2));
-        Integer month = Integer.valueOf(date.substring(3, 5));
-        Integer year = Integer.valueOf(date.substring(6, 10));
+        int day = Integer.parseInt(date.substring(0, 2));
+        int month = Integer.parseInt(date.substring(3, 5));
+        int year = Integer.parseInt(date.substring(6, 10));
         switch (month){
-            case 4:;
-            case 6:;
-            case 9:;
+            case 4:
+            case 6:
+            case 9:
             case 11:{
                 if (day < 30) day++;
                 else{
@@ -260,11 +264,11 @@ public class AddNewTaskActivity extends AppCompatActivity {
                 }
                 break;
             }
-            case 1:;
-            case 3:;
-            case 5:;
-            case 7:;
-            case 8:;
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
             case 10:{
                 if (day < 31) day++;
                 else{

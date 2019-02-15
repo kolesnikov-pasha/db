@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,9 +24,10 @@ public class EditHometaskActivity extends AppCompatActivity {
     EditText edtHometask;
     TextView txtLesson, txtDate;
     int number;
+    String groupId;
     Button btnAdd;
 
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,9 @@ public class EditHometaskActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         String lesson = bundle.getString("Lesson");
+        groupId = bundle.getString("GROUPID");
+        assert groupId != null;
+        reference = reference.child(groupId);
         day = bundle.getString("Day");
         number = bundle.getInt("Lesson number");
         txtDate.setText(day);
@@ -63,7 +66,9 @@ public class EditHometaskActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), GroupViewActivity.class));
+                Intent intent = new Intent(getApplicationContext(), GroupViewActivity.class);
+                intent.putExtra("GROUPID", groupId);
+                startActivityForResult(intent, 0);
             }
         });
         btnAdd = findViewById(R.id.add_btn_add);
@@ -75,12 +80,14 @@ public class EditHometaskActivity extends AppCompatActivity {
                 else {
                     reference.setValue(task);
                     Toast.makeText(getApplicationContext(), "Задание добавлено", Toast.LENGTH_SHORT).show();
-                    startActivityForResult(new Intent(getApplicationContext(), GroupViewActivity.class), 0);
+                    Intent intent = new Intent(getApplicationContext(), GroupViewActivity.class);
+                    intent.putExtra("GROUPID", groupId);
+                    startActivityForResult(intent, 0);
                 }
             }
         });
 
-        btnAddAttachments = (ImageButton) findViewById(R.id.add_attachments);
+        btnAddAttachments = findViewById(R.id.add_attachments);
         btnAddAttachments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

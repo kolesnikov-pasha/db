@@ -16,9 +16,13 @@ public class LessonsListAdapter extends BaseAdapter {
     private ArrayList<Lesson> lessons;
 
 
-    private String day = "";
+    private String day = "", groupId = "";
     private Context context;
     private LayoutInflater layoutInflater;
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     ArrayList<Lesson> getLessons() {
         return lessons;
@@ -50,7 +54,7 @@ public class LessonsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, final ViewGroup viewGroup) {
         if (view == null){
             view = layoutInflater.inflate(R.layout.table_row, viewGroup, false);
         }
@@ -61,11 +65,11 @@ public class LessonsListAdapter extends BaseAdapter {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Intent intent = new Intent(context, AdminAuthActivity.class);
+                Intent intent = new Intent(context, EditHometaskActivity.class);
                 intent.putExtra("Lesson", lessons.get(x).getLesson());
                 intent.putExtra("Lesson number", lessons.get(x).getNumber());
                 intent.putExtra("Day", day);
-                intent.putExtra("Next", 3);
+                intent.putExtra("GROUPID", groupId);
                 Log.e("DAY_ADAPTER", day);
                 context.startActivity(intent);
                 return false;
