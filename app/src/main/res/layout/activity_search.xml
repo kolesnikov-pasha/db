@@ -8,6 +8,9 @@
     tools:context=".SearchActivity"
     android:orientation="vertical">
 
+    <include
+        layout="@layout/main_app_bar"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
