@@ -34,9 +34,9 @@ public class ProfileFileListAdapter extends BaseAdapter {
         }
     }
 
-    Context context;
-    LayoutInflater inflater;
-    ArrayList<FileModel> fileModelsArray;
+    private Context context;
+    private LayoutInflater inflater;
+    private ArrayList<FileModel> fileModelsArray;
 
     ProfileFileListAdapter (Context cnt, ArrayList<FileModel> fileModels){
         this.fileModelsArray = fileModels;
