@@ -143,6 +143,10 @@ public class GroupsListActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
+                    case R.id.nav_find_groups:{
+                        startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                        break;
+                    }
                     case R.id.nav_my_groups:{
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         break;
