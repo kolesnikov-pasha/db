@@ -117,7 +117,6 @@ public class AdminOptionsActivity extends AppCompatActivity {
                 }
                 reference.child("Name").setValue(edtChangeName.getText().toString());
                 Toast.makeText(getApplicationContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show();
-
             }
         });
         adaptOption();

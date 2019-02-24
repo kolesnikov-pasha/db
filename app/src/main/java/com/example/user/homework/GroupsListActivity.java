@@ -23,10 +23,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 
-class Group{
+class Group implements Comparable<Group>{
 
     private String name = "", id = "", password = "";
     private ArrayList<String> admin = new ArrayList<>();
@@ -69,6 +72,11 @@ class Group{
     }
 
     public Group() {
+    }
+
+    @Override
+    public int compareTo(Group o) {
+        return id.compareTo(o.id);
     }
 }
 
@@ -125,6 +133,7 @@ public class GroupsListActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     NavigationView navigationView;
     TextView txtName;
+    Set<Group> groups = new TreeSet<>();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     User currentUser;
@@ -134,7 +143,7 @@ public class GroupsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups_list);
         listView = findViewById(R.id.groups_list);
-        currentUser = new User("", "", "", new ArrayList<Group>());
+        currentUser = new User("", "", "", new ArrayList<>());
         btnBurger = findViewById(R.id.btn_burger_groups);
         mDrawerLayout = findViewById(R.id.groups_list_layout);
         navigationView = findViewById(R.id.groups_menu);
@@ -170,22 +179,42 @@ public class GroupsListActivity extends AppCompatActivity {
             }
         });
         reference.child("users").child(uid).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            void getData(DataSnapshot dataSnapshot){
                 User user = dataSnapshot.getValue(User.class);
                 assert user != null;
                 currentUser = user;
                 if (txtName != null) txtName.setText(currentUser.getName() + " " + currentUser.getSurname());
-                listView.setAdapter(new GroupsAdapter(currentUser.getGroups(), getApplicationContext()));
+                //listView.setAdapter(new GroupsAdapter(currentUser.getGroups(), getApplicationContext()));
+                for (String uid : user.getGroups()) {
+                    DatabaseReference toGroup = FirebaseDatabase.getInstance().getReference().child(uid);
+                    toGroup.child("Name").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            groups.add(new Group(dataSnapshot.getValue(String.class), uid));
+                            ArrayList<Group> gg = new ArrayList<>();
+                            gg.addAll(groups);
+                            listView.setAdapter(new GroupsAdapter(gg, getApplicationContext()));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            groups.add(new Group(dataSnapshot.getValue(String.class), uid));
+                            ArrayList<Group> gg = new ArrayList<>();
+                            gg.addAll(groups);
+                            listView.setAdapter(new GroupsAdapter(gg, getApplicationContext()));
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                getData(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                User user = dataSnapshot.getValue(User.class);
-                assert user != null;
-                currentUser = user;
-                if (txtName != null) txtName.setText(currentUser.getName() + " " + currentUser.getSurname());
-                listView.setAdapter(new GroupsAdapter(currentUser.getGroups(), getApplicationContext()));
+                getData(dataSnapshot);
             }
 
             @Override

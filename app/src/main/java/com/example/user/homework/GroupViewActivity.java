@@ -17,7 +17,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -72,13 +75,14 @@ public class GroupViewActivity extends AppCompatActivity{
     int DIALOG_DATE = 1;
     ListView lessonsList;
 
-    String groupId = "";
+    String groupId = "", uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     DatabaseReference reference;
     ImageButton btnCalendar, btnBurger;
     TreeSet<Lesson> lessons = new TreeSet<>();
     ArrayList<Lesson> lessonArrayList = new ArrayList<>();
     NavigationView navigationView;
     DrawerLayout mDrawerLayout;
+    boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,36 @@ public class GroupViewActivity extends AppCompatActivity{
         Log.e("ID", groupId);
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
 
+        reference = FirebaseDatabase.getInstance().getReference().child(groupId);
+
+        reference.child("Admin").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String get = dataSnapshot.getValue(String.class);
+                if (get.equals(uid)) isAdmin = true;
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String get = dataSnapshot.getValue(String.class);
+                if (get.equals(uid)) isAdmin = true;
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         btnBurger = findViewById(R.id.btn_burger);
         btnCalendar = findViewById(R.id.btn_calendar);
         btnBurger.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +159,11 @@ public class GroupViewActivity extends AppCompatActivity{
                     }
                 }
                 intent.putExtra("GROUPID", groupId);
-                startActivity(intent);
+                if (isAdmin) startActivity(intent);
+                else {
+                    Toast.makeText(getApplicationContext(), "Вы не администратор группы", Toast.LENGTH_SHORT).show();
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                }
                 return false;
             }
         });
@@ -138,8 +176,6 @@ public class GroupViewActivity extends AppCompatActivity{
         chooseDate = findViewById(R.id.main_choose_date);
 
         lessonsList.setAdapter(new LessonsListAdapter(lessonArrayList, getApplicationContext()));
-
-        reference = FirebaseDatabase.getInstance().getReference().child(groupId);
 
         chooseDate.setOnClickListener(new View.OnClickListener() {
             @Override

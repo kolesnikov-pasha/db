@@ -68,11 +68,11 @@ public class CreateGroupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!edtName.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()) {
                     if (currentUser != null) {
-                        currentUser.addGroup(edtName.getText().toString(), edtPassword.getText().toString());
+                        currentUser.createGroup(edtName.getText().toString(), edtPassword.getText().toString());
                         reference.child("userInformation").setValue(currentUser);
                         Intent intent = new Intent(getApplicationContext(), GroupViewActivity.class);
                         intent.putExtra("GROUPID", currentUser.getGroups()
-                                .get(currentUser.getGroups().size() - 1).getId());
+                                .get(currentUser.getGroups().size() - 1));
                         startActivity(intent);
                     }
                 }

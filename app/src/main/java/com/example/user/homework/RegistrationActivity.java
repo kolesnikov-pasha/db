@@ -68,21 +68,20 @@ public class RegistrationActivity extends AppCompatActivity {
                     String uid = auth.getCurrentUser().getUid();
                     database.getReference().child("users").child(uid).child("userInformation")
                             .setValue(new User(edtName.getText().toString(),
-                                    edtSurname.getText().toString(), email, new ArrayList<Group>()));
+                                    edtSurname.getText().toString(), email, new ArrayList<>()));
                     FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
                                 Toast.makeText(getApplicationContext(), "На адрес " + email +
                                         " выслано письмо для подтверждения регистрации", Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getApplicationContext(), AdminOptionsActivity.class));
+                                startActivity(new Intent(getApplicationContext(), AuthActivity.class));
                             }else{
                                 Toast.makeText(getApplicationContext(), "Отправить письмо для подтверждения " +
                                         "регистрации не получилось", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-                    startActivity(new Intent(getApplicationContext(), GroupViewActivity.class));
                 } else {
                     Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
                 }

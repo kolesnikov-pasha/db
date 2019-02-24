@@ -1,10 +1,14 @@
 package com.example.user.homework;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +17,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -55,7 +61,7 @@ class GroupView{
     public String toString() {
         return "GroupView{" +
                 "name='" + name + '\'' +
-                ", uid='" + uid + '\'' +
+                ", id='" + uid + '\'' +
                 '}';
     }
 }
@@ -65,7 +71,7 @@ class SearchEngine{
     private static class Pair implements Comparable<Pair>{
         String s, t;
 
-        public Pair(String s, String t) {
+        Pair(String s, String t) {
             this.s = s;
             this.t = t;
         }
@@ -93,7 +99,7 @@ class SearchEngine{
             return v.compareTo(o.v);
         }
 
-        public PairForSort(String s, String uid, Double v) {
+        PairForSort(String s, String uid, Double v) {
             this.s = s;
             this.uid = uid;
             this.v = v;
@@ -140,10 +146,10 @@ class SearchEngine{
 class SearchAdapter extends BaseAdapter {
 
     private ArrayList<GroupView> groups;
-    Context context;
-    LayoutInflater inflater;
+    private Context context;
+    private LayoutInflater inflater;
 
-    public SearchAdapter(ArrayList<GroupView> groups, Context context) {
+    SearchAdapter(ArrayList<GroupView> groups, Context context) {
         this.groups = groups;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -173,6 +179,15 @@ class SearchAdapter extends BaseAdapter {
             ((TextView) view.findViewById(R.id.txt_group_view_uid)).setText(groups.get(position).uid);
             ((TextView) view.findViewById(R.id.txt_group_view_name)).setText(groups.get(position).name);
         }
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, GroupPasswordActivity.class);
+                intent.putExtra("NAME", groups.get(position).name);
+                intent.putExtra("UID", groups.get(position).uid);
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 }
@@ -186,6 +201,8 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<GroupView> adapterList = new ArrayList<>();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("groups");
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,24 +214,54 @@ public class SearchActivity extends AppCompatActivity {
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                GroupView group = dataSnapshot.getValue(GroupView.class);
-                assert group != null;
-                System.out.println(group.toString());
-                if (group.name != null && group.uid != null) {
-                    list.add(group);
-                    //listView.setAdapter(new SearchAdapter(list, getApplicationContext()));
-                }
+                String uid = dataSnapshot.getValue(String.class);
+                final String[] name = {""};
+                assert uid != null;
+                System.out.println(uid);
+                DatabaseReference toGroup = FirebaseDatabase.getInstance().getReference();
+                toGroup.child(uid).child("Name").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        name[0] = dataSnapshot.getValue(String.class);
+                        assert name[0] != null;
+                        GroupView group = new GroupView(name[0], uid);
+                        list.add(group);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        name[0] = dataSnapshot.getValue(String.class);
+                        assert name[0] != null;
+                        GroupView group = new GroupView(name[0], uid);
+                        list.add(group);
+                    }
+                });
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                GroupView group = dataSnapshot.getValue(GroupView.class);
-                assert group != null;
-                System.out.println(group.toString());
-                if (group.name != null || group.uid != null) {
-                    list.add(group);
-                    //listView.setAdapter(new SearchAdapter(list, getApplicationContext()));
-                }
+                String uid = dataSnapshot.getValue(String.class);
+                final String[] name = {""};
+                assert uid != null;
+                System.out.println(uid);
+                DatabaseReference toGroup = FirebaseDatabase.getInstance().getReference();
+                toGroup.child(uid).child("Name").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        name[0] = dataSnapshot.getValue(String.class);
+                        assert name[0] != null;
+                        GroupView group = new GroupView(name[0], uid);
+                        list.add(group);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        name[0] = dataSnapshot.getValue(String.class);
+                        assert name[0] != null;
+                        GroupView group = new GroupView(name[0], uid);
+                        list.add(group);
+                    }
+                });
             }
 
             @Override
@@ -232,32 +279,34 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
-        button.setOnClickListener(v -> {
-            if (!String.valueOf(edtSearch.getText()).isEmpty()) {
-                String search = String.valueOf(edtSearch.getText());
-                ArrayList<SearchEngine.PairForSort> sort = new ArrayList<>();
-                adapterList.clear();
-                for (int i = 0; i < list.size(); i++) {
-                    int value = SearchEngine.levensteinDelta(list.get(i).name, search);
-                    if (value <= 2) {
-                        sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
-                                (double) value));
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                if (!String.valueOf(edtSearch.getText()).isEmpty()) {
+                    String search = String.valueOf(edtSearch.getText());
+                    ArrayList<SearchEngine.PairForSort> sort = new ArrayList<>();
+                    adapterList.clear();
+                    for (int i = 0; i < list.size(); i++) {
+                        int value = SearchEngine.levensteinDelta(list.get(i).name, search);
+                        if (value <= 2) {
+                            sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
+                                    (double) value));
+                        } else if (SearchEngine.maxCommonSubstring(list.get(i).name, search) == search.length()) {
+                            sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
+                                    (double) value));
+                        }
                     }
-                    else if (SearchEngine.maxCommonSubstring(list.get(i).name, search) == search.length()){
-                        sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
-                                (double) value));
-                    }
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     sort.sort(SearchEngine.PairForSort::compareTo);
+                    for (SearchEngine.PairForSort pair : sort) {
+                        adapterList.add(new GroupView(pair.s, pair.uid));
+                    }
+                    listView.setAdapter(new SearchAdapter(adapterList, SearchActivity.this.getApplicationContext()));
+                } else {
+                    listView.setAdapter(new SearchAdapter(list, SearchActivity.this.getApplicationContext()));
                 }
-                for (SearchEngine.PairForSort pair : sort) {
-                    adapterList.add(new GroupView(pair.s, pair.uid));
-                }
-                listView.setAdapter(new SearchAdapter(adapterList, getApplicationContext()));
-            }
-            else {
-                listView.setAdapter(new SearchAdapter(list, getApplicationContext()));
             }
         });
 

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".GroupPasswordActivity"></activity>
+        <activity android:name=".SearchActivity" />
         <activity android:name=".CreateGroupActivity" />
         <activity android:name=".GroupsListActivity" />
         <activity android:name=".PasswordRemindActivity" />

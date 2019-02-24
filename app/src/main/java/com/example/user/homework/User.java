@@ -1,8 +1,11 @@
 package com.example.user.homework;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,12 +13,12 @@ import java.util.ArrayList;
 public class User implements Serializable {
 
     private String name, surname, email;
-    private ArrayList<Group> groups;
+    private ArrayList<String> groups;
     private Integer createCount = 0;
     private String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-    ArrayList<Group> getGroups() {
+    ArrayList<String> getGroups() {
         return groups;
     }
 
@@ -27,11 +30,11 @@ public class User implements Serializable {
         this.createCount = createCount;
     }
 
-    public void setGroups(ArrayList<Group> groups) {
+    public void setGroups(ArrayList<String> groups) {
         this.groups = groups;
     }
 
-    public User(String name, String surname, String email, ArrayList<Group> groups) {
+    public User(String name, String surname, String email, ArrayList<String> groups) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -65,27 +68,40 @@ public class User implements Serializable {
         this.surname = surname;
     }
 
-    void addGroup(String name, String password){
-        Group group = new Group();
-        group.setName(name);
+    void createGroup(String name, String password){
+        String group = "";
         if (createCount == 0) {
-            group.setId(uid);
+            group = uid;
         }
         else {
-            group.setId(uid + "(" + createCount + "");
+            group = uid + "(" + createCount + "";
         }
         createCount++;
-        group.setPassword(password);
         if (groups == null)  {
             groups = new ArrayList<>();
         }
         groups.add(group);
-        DatabaseReference groupRef = reference.child(group.getId());
+        DatabaseReference groupRef = reference.child(group);
         groupRef.child("Password").setValue(password);
         groupRef.child("Name").setValue(name);
         ArrayList<String> admins = new ArrayList<>();
         admins.add(uid);
         groupRef.child("Admin").setValue(admins);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        final String finalGroup = group;
+        reference.child("groupsCount").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Integer count = dataSnapshot.getValue(Integer.class);
+                reference.child("groups").child(count + "").setValue(finalGroup);
+                reference.child("groupsCount").removeEventListener(this);
+                reference.child("groupsCount").setValue(count + 1);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
 }
