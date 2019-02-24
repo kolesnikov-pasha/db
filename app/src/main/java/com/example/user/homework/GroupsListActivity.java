@@ -66,7 +66,7 @@ class Group implements Comparable<Group>{
         this.id = id;
     }
 
-    public Group(String name, String id) {
+    Group(String name, String id) {
         this.name = name;
         this.id = id;
     }
@@ -114,13 +114,10 @@ class GroupsAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.groups_list_item, parent, false);
         }
         ((TextView) view.findViewById(R.id.txt_item_name)).setText(groups.get(position).getName());
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, GroupViewActivity.class);
-                intent.putExtra("GROUPID", groups.get(position).getId());
-                context.startActivity(intent);
-            }
+        view.setOnClickListener(v -> {
+            Intent intent = new Intent(context, GroupViewActivity.class);
+            intent.putExtra("GROUPID", groups.get(position).getId());
+            context.startActivity(intent);
         });
         return view;
     }

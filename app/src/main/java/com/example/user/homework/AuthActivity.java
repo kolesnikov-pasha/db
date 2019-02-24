@@ -101,7 +101,7 @@ public class AuthActivity extends AppCompatActivity {
         txtPassRemaind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PasswordRemindActivity.class));
+                startActivity(new Intent(getApplicationContext(), PasswordResetActivity.class));
             }
         });
         txtRegistration = findViewById(R.id.btn_registration);

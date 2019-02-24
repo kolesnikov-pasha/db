@@ -31,6 +31,7 @@
                 <EditText
                     android:id="@+id/edt_change_old_pass"
                     style="@style/PrimaryEditText"
+                    android:inputType="textPassword"
                     android:hint="Старый пароль"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
@@ -39,6 +40,7 @@
                 <EditText
                     android:id="@+id/edt_change_new_pass"
                     style="@style/PrimaryEditText"
+                    android:inputType="textPassword"
                     android:hint="Новый пароль"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
@@ -47,6 +49,7 @@
                 <EditText
                     android:id="@+id/edt_repeat_new_pass"
                     style="@style/PrimaryEditText"
+                    android:inputType="textPassword"
                     android:hint="Повторите новый пароль"/>
             </android.support.design.widget.TextInputLayout>
 

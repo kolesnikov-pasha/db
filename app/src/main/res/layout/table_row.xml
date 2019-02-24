@@ -46,6 +46,7 @@
     <ImageButton
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:id="@+id/btn_edit"
         android:background="@drawable/baseline_edit_black_24dp"
         android:layout_alignParentRight="true"/>
 

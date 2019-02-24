@@ -15,7 +15,7 @@
         <activity android:name=".SearchActivity" />
         <activity android:name=".CreateGroupActivity" />
         <activity android:name=".GroupsListActivity" />
-        <activity android:name=".PasswordRemindActivity" />
+        <activity android:name=".PasswordResetActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity
             android:name=".AccountSettingsActivity"

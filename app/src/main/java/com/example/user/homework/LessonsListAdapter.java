@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,11 @@ public class LessonsListAdapter extends BaseAdapter {
     private String day = "", groupId = "";
     private Context context;
     private LayoutInflater layoutInflater;
+    private boolean isAdmin = false;
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
@@ -62,17 +68,21 @@ public class LessonsListAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.txt_lesson)).setText(lessons.get(i).getLesson());
         ((TextView) view.findViewById(R.id.txt_task)).setText(lessons.get(i).getHomework());
         final int x = i;
-        view.setOnLongClickListener(new View.OnLongClickListener() {
+        view.findViewById(R.id.btn_edit).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                Intent intent = new Intent(context, EditHometaskActivity.class);
-                intent.putExtra("Lesson", lessons.get(x).getLesson());
-                intent.putExtra("Lesson number", lessons.get(x).getNumber());
-                intent.putExtra("Day", day);
-                intent.putExtra("GROUPID", groupId);
-                Log.e("DAY_ADAPTER", day);
-                context.startActivity(intent);
-                return false;
+            public void onClick(View v) {
+                if (isAdmin) {
+                    Intent intent = new Intent(context, EditHometaskActivity.class);
+                    intent.putExtra("Lesson", lessons.get(x).getLesson());
+                    intent.putExtra("Lesson number", lessons.get(x).getNumber());
+                    intent.putExtra("Day", day);
+                    intent.putExtra("GROUPID", groupId);
+                    Log.e("DAY_ADAPTER", day);
+                    context.startActivity(intent);
+                }
+                else {
+                    Toast.makeText(context, "Вы не администратор", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return view;

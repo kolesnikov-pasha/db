@@ -32,6 +32,7 @@
                 android:id="@+id/et_group_password"
                 android:layout_width="250dp"
                 android:layout_height="50dp"
+                android:inputType="textPassword"
                 android:hint="Пароль" />
         </android.support.design.widget.TextInputLayout>
 

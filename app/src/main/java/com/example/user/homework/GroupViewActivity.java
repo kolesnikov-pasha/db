@@ -100,13 +100,19 @@ public class GroupViewActivity extends AppCompatActivity{
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String get = dataSnapshot.getValue(String.class);
-                if (get.equals(uid)) isAdmin = true;
+                if (get.equals(uid)) {
+                    ((LessonsListAdapter) lessonsList.getAdapter()).setAdmin(true);
+                    isAdmin = true;
+                }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String get = dataSnapshot.getValue(String.class);
-                if (get.equals(uid)) isAdmin = true;
+                if (get.equals(uid)) {
+                    ((LessonsListAdapter) lessonsList.getAdapter()).setAdmin(true);
+                    isAdmin = true;
+                }
             }
 
             @Override
