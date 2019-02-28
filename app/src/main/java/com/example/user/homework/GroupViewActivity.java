@@ -65,22 +65,19 @@ class Lesson implements Comparable<Lesson>{
 
 public class GroupViewActivity extends AppCompatActivity{
 
+    private TextView txtDayOfWeek, txtDate;
+    private ListView lessonsList;
+    private NavigationView navigationView;
+    private DrawerLayout mDrawerLayout;
 
-    ImageButton nextDay, prevDay;
-    TextView DayOfWeek, Date;
-    LinearLayout chooseDate;
-    int myYear, myMonth, myDay;
-    int DIALOG_DATE = 1;
-    ListView lessonsList;
+    private String groupId = "", uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private DatabaseReference reference;
 
-    String groupId = "", uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    DatabaseReference reference;
-    ImageButton btnCalendar, btnBurger;
-    TreeSet<Lesson> lessons = new TreeSet<>();
-    ArrayList<Lesson> lessonArrayList = new ArrayList<>();
-    NavigationView navigationView;
-    DrawerLayout mDrawerLayout;
-    boolean isAdmin = false;
+    private Calendar calendar = Calendar.getInstance();
+    private TreeSet<Lesson> lessons = new TreeSet<>();
+    private ArrayList<Lesson> lessonArrayList = new ArrayList<>();
+    private boolean isAdmin = false;
+    private final static int DIALOG_DATE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,29 +85,41 @@ public class GroupViewActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         Bundle from = getIntent().getExtras();
+        assert from != null;
         groupId = from.getString("GROUPID");
         Log.e("ID", groupId);
+
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        lessonsList = findViewById(R.id.list_lessons_main);
+        txtDate = findViewById(R.id.date);
+        txtDayOfWeek = findViewById(R.id.day_of_week);
+        ImageButton btnBurger = findViewById(R.id.btn_burger);
+        ImageButton btnCalendar = findViewById(R.id.btn_calendar);
+        ImageButton btnNextDay = findViewById(R.id.next_day);
+        ImageButton btnPrevDay = findViewById(R.id.prev_day);
+        LinearLayout chooseDateLayout = findViewById(R.id.choose_date);
 
         reference = FirebaseDatabase.getInstance().getReference().child(groupId);
-
         reference.child("Admin").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            void getData(DataSnapshot dataSnapshot){
                 String get = dataSnapshot.getValue(String.class);
+                assert get != null;
                 if (get.equals(uid)) {
-                    ((LessonsListAdapter) lessonsList.getAdapter()).setAdmin(true);
+                    ((LessonsListAdapter) lessonsList.getAdapter()).setAdmin();
                     isAdmin = true;
                 }
             }
 
             @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                getData(dataSnapshot);
+            }
+
+            @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String get = dataSnapshot.getValue(String.class);
-                if (get.equals(uid)) {
-                    ((LessonsListAdapter) lessonsList.getAdapter()).setAdmin(true);
-                    isAdmin = true;
-                }
+                getData(dataSnapshot);
             }
 
             @Override
@@ -128,13 +137,24 @@ public class GroupViewActivity extends AppCompatActivity{
 
             }
         });
-        btnBurger = findViewById(R.id.btn_burger);
-        btnCalendar = findViewById(R.id.btn_calendar);
+
         btnBurger.setOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
-
         btnCalendar.setOnClickListener(v -> showDialog(DIALOG_DATE));
-
-        navigationView = findViewById(R.id.nav_view);
+        chooseDateLayout.setOnClickListener(view -> showDialog(DIALOG_DATE));
+        btnNextDay.setOnClickListener(v -> {
+            nextDay();
+            String date = txtDate.getText().toString();
+            String dayOfWeek = txtDayOfWeek.getText().toString();
+            date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
+            adaptMain(date, dayOfWeek);
+        });
+        btnPrevDay.setOnClickListener(v -> {
+            prevDay();
+            String date = txtDate.getText().toString();
+            String dayOfWeek = txtDayOfWeek.getText().toString();
+            date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
+            adaptMain(date, dayOfWeek);
+        });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             Intent intent = new Intent();
             switch (menuItem.getItemId()){
@@ -158,38 +178,8 @@ public class GroupViewActivity extends AppCompatActivity{
             }
             return false;
         });
-        lessonsList = findViewById(R.id.list_lessons_main);
-        Date = findViewById(R.id.date);
-        DayOfWeek = findViewById(R.id.day_of_week);
-
-        nextDay = findViewById(R.id.next_day);
-        prevDay = findViewById(R.id.prev_day);
-        chooseDate = findViewById(R.id.choose_date);
 
         lessonsList.setAdapter(new LessonsListAdapter(lessonArrayList, getApplicationContext()));
-
-        chooseDate.setOnClickListener(view -> showDialog(DIALOG_DATE));
-
-        nextDay.setOnClickListener(v -> {
-            nextDay();
-            String date = Date.getText().toString();
-            String dayOfWeek = DayOfWeek.getText().toString();
-            date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
-            myDay = Integer.valueOf(date.substring(0, 2));
-            myMonth = Integer.valueOf(date.substring(2, 4));
-            myYear = Integer.valueOf(date.substring(4, 8));
-            adaptMain(date, dayOfWeek);
-        });
-        prevDay.setOnClickListener(v -> {
-            prevDay();
-            String date = Date.getText().toString();
-            String dayOfWeek = DayOfWeek.getText().toString();
-            date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
-            myDay = Integer.valueOf(date.substring(0, 2));
-            myMonth = Integer.valueOf(date.substring(2, 4));
-            myYear = Integer.valueOf(date.substring(4, 8));
-            adaptMain(date, dayOfWeek);
-        });
 
         reference.child("Name").addValueEventListener(new ValueEventListener() {
             @Override
@@ -204,19 +194,21 @@ public class GroupViewActivity extends AppCompatActivity{
         });
 
         Calendar calendar = Calendar.getInstance();
-        myDay = calendar.get(Calendar.DAY_OF_MONTH);
-        myMonth = calendar.get(Calendar.MONTH);
-        myYear = calendar.get(Calendar.YEAR);
-        changeDate(myDay, myMonth + 1, myYear);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int year = calendar.get(Calendar.YEAR);
+        changeDate(day, month, year);
         changeDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-
-        adaptMain(Date.getText().toString().substring(0, 2) + Date.getText().toString()
-                .substring(3, 5) + Date.getText().toString().substring(6, 10), DayOfWeek.getText().toString());
+        adaptMain(txtDate.getText().toString().substring(0, 2) + txtDate.getText().toString()
+                .substring(3, 5) + txtDate.getText().toString().substring(6, 10), txtDayOfWeek.getText().toString());
     }
 
     protected Dialog onCreateDialog(int id){
         if (id == DIALOG_DATE) {
-            return new DatePickerDialog(GroupViewActivity.this, myCallBack, myYear, myMonth, myDay);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(GroupViewActivity.this, myCallBack, year, month, day);
         }
         else
             return super.onCreateDialog(id);
@@ -226,34 +218,30 @@ public class GroupViewActivity extends AppCompatActivity{
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            myYear = year;
-            myMonth = monthOfYear;
-            myDay = dayOfMonth;
-            changeDate(myDay, myMonth + 1, myYear);
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, myMonth, dayOfMonth);
+            changeDate(dayOfMonth, monthOfYear + 1, year);
+            calendar.set(year, monthOfYear, dayOfMonth);
             changeDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-            adaptMain(Date.getText().toString().substring(0, 2) + Date.getText().toString()
-                    .substring(3, 5) + Date.getText().toString().substring(6, 10), DayOfWeek.getText().toString());
+            adaptMain(txtDate.getText().toString().substring(0, 2) + txtDate.getText().toString()
+                    .substring(3, 5) + txtDate.getText().toString().substring(6, 10), txtDayOfWeek.getText().toString());
         }
     };
 
+    private void prevDay(){
+        changeDay(-1);
+    }
+
     private void nextDay(){
-        String date = Date.getText().toString();
-        Integer day = Integer.valueOf(date.substring(0, 2));
-        Integer month = Integer.valueOf(date.substring(3, 5)) - 1;
-        Integer year = Integer.valueOf(date.substring(6, 10));
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        month = calendar.get(Calendar.MONTH) + 1;
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        year = calendar.get(Calendar.YEAR);
+        changeDay(1);
+    }
+
+    private void changeDay(int d){
+        calendar.add(Calendar.DAY_OF_MONTH, d);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
         changeDate(day, month, year);
-        Calendar c = Calendar.getInstance();
-        c.set(year, month - 1, day);
-        int WeekDay = c.get(Calendar.DAY_OF_WEEK);
-        changeDayOfWeek(WeekDay);
+        changeDayOfWeek(weekDay);
     }
 
     public void changeDate(int day, int month, int year){
@@ -267,58 +255,14 @@ public class GroupViewActivity extends AppCompatActivity{
         }
         else res += "0" + month + ".";
         res += year;
-        Date.setText(res);
+        txtDate.setText(res);
     }
+
+    final static String daysOfWeek[] = new String[]
+            {"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"};
 
     public void changeDayOfWeek(int WeekDay){
-        switch (WeekDay) {
-            case 2:{
-                DayOfWeek.setText("Понедельник");
-                break;
-            }
-            case 3:{
-                DayOfWeek.setText("Вторник");
-                break;
-            }
-            case 4:{
-                DayOfWeek.setText("Среда");
-                break;
-            }
-            case 5:{
-                DayOfWeek.setText("Четверг");
-                break;
-            }
-            case 6:{
-                DayOfWeek.setText("Пятница");
-                break;
-            }
-            case 7:{
-                DayOfWeek.setText("Суббота");
-                break;
-            }
-            case 1:{
-                DayOfWeek.setText("Воскресенье");
-                break;
-            }
-        }
-    }
-
-    private void prevDay(){
-        String date = Date.getText().toString();
-        int day = Integer.parseInt(date.substring(0, 2));
-        int month = Integer.parseInt(date.substring(3, 5)) - 1;
-        int year = Integer.parseInt(date.substring(6, 10));
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        month = calendar.get(Calendar.MONTH) + 1;
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        year = calendar.get(Calendar.YEAR);
-        changeDate(day, month, year);
-        Calendar c = Calendar.getInstance();
-        c.set(year, month - 1, day);
-        int WeekDay = c.get(Calendar.DAY_OF_WEEK);
-        changeDayOfWeek(WeekDay);
+        txtDayOfWeek.setText(daysOfWeek[WeekDay - 1]);
     }
 
     public void adaptMain(String day, String weekDay){

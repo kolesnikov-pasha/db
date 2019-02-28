@@ -11,14 +11,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class PasswordResetActivity extends AppCompatActivity {
 
-    Button btnReset;
-    EditText edtEmail;
+    private EditText edtEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_remaind);
-        btnReset = findViewById(R.id.btn_start_reset);
+        Button btnReset = findViewById(R.id.btn_start_reset);
         edtEmail = findViewById(R.id.edt_email_for_password_reset);
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override

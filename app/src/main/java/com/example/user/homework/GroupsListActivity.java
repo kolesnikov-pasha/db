@@ -1,5 +1,6 @@
 package com.example.user.homework;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -75,7 +76,7 @@ class Group implements Comparable<Group>{
     }
 
     @Override
-    public int compareTo(Group o) {
+    public int compareTo(@NonNull Group o) {
         return id.compareTo(o.id);
     }
 }
@@ -132,7 +133,7 @@ public class GroupsListActivity extends AppCompatActivity {
     TextView txtName;
     Set<Group> groups = new TreeSet<>();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     User currentUser;
 
     @Override
@@ -145,37 +146,30 @@ public class GroupsListActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.groups_list_layout);
         navigationView = findViewById(R.id.groups_menu);
         txtName = navigationView.getHeaderView(0).findViewById(R.id.txt_name);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.nav_find_groups:{
-                        startActivity(new Intent(getApplicationContext(), SearchActivity.class));
-                        break;
-                    }
-                    case R.id.nav_my_groups:{
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    }
-                    case R.id.nav_settings:{
-                        startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
-                        break;
-                    }
-                    case R.id.nav_add_group:{
-                        startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
-                        break;
-                    }
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()){
+                case R.id.nav_find_groups:{
+                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                    break;
                 }
-                return false;
+                case R.id.nav_my_groups:{
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                }
+                case R.id.nav_settings:{
+                    startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
+                    break;
+                }
+                case R.id.nav_add_group:{
+                    startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
+                    break;
+                }
             }
+            return false;
         });
-        btnBurger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        btnBurger.setOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
         reference.child("users").child(uid).addChildEventListener(new ChildEventListener() {
+            @SuppressLint("SetTextI18n")
             void getData(DataSnapshot dataSnapshot){
                 User user = dataSnapshot.getValue(User.class);
                 assert user != null;
@@ -187,8 +181,7 @@ public class GroupsListActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             groups.add(new Group(dataSnapshot.getValue(String.class), uid));
-                            ArrayList<Group> gg = new ArrayList<>();
-                            gg.addAll(groups);
+                            ArrayList<Group> gg = new ArrayList<>(groups);
                             listView.setAdapter(new GroupsAdapter(gg, getApplicationContext()));
                         }
 
@@ -227,6 +220,5 @@ public class GroupsListActivity extends AppCompatActivity {
 
             }
         });
-
     }
 }

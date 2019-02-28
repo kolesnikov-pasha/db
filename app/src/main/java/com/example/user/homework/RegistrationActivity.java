@@ -2,17 +2,13 @@ package com.example.user.homework;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -60,31 +56,26 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     void registration(final String email, String password){
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                    String uid = auth.getCurrentUser().getUid();
-                    database.getReference().child("users").child(uid).child("userInformation")
-                            .setValue(new User(edtName.getText().toString(),
-                                    edtSurname.getText().toString(), email, new ArrayList<>()));
-                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Toast.makeText(getApplicationContext(), "На адрес " + email +
-                                        " выслано письмо для подтверждения регистрации", Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                            }else{
-                                Toast.makeText(getApplicationContext(), "Отправить письмо для подтверждения " +
-                                        "регистрации не получилось", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-                }
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getParent(), task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                FirebaseUser user = auth.getCurrentUser();
+                String uid = user.getUid();
+                database.getReference().child("users").child(uid).child("userInformation")
+                        .setValue(new User(edtName.getText().toString(),
+                                edtSurname.getText().toString(), email, new ArrayList<>()));
+                user.sendEmailVerification().addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()){
+                        Toast.makeText(getApplicationContext(), "На адрес " + email +
+                                " выслано письмо для подтверждения регистрации", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Отправить письмо для подтверждения " +
+                                "регистрации не получилось", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -93,22 +84,22 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
         edtEmail = findViewById(R.id.edt_email);
         btnEndRegistration = findViewById(R.id.btn_end_registration);
         edtNewPassword = findViewById(R.id.edt_password);
         edtName = findViewById(R.id.edt_name);
         edtSurname = findViewById(R.id.edt_surname);
         edtNewPasswordAgain = findViewById(R.id.edt_password_again);
+
         auth.signOut();
-        btnEndRegistration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (check()) {
-                    if (edtNewPassword.getText().toString().equals(edtNewPasswordAgain.getText().toString())) {
-                        registration(edtEmail.getText().toString(), edtNewPassword.getText().toString());
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show();
-                    }
+
+        btnEndRegistration.setOnClickListener(v -> {
+            if (check()) {
+                if (edtNewPassword.getText().toString().equals(edtNewPasswordAgain.getText().toString())) {
+                    registration(edtEmail.getText().toString(), edtNewPassword.getText().toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show();
                 }
             }
         });

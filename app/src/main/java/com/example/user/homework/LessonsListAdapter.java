@@ -1,5 +1,6 @@
 package com.example.user.homework;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -22,11 +23,11 @@ public class LessonsListAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private boolean isAdmin = false;
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    void setAdmin() {
+        isAdmin = true;
     }
 
-    public void setGroupId(String groupId) {
+    void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
@@ -34,7 +35,7 @@ public class LessonsListAdapter extends BaseAdapter {
         return lessons;
     }
 
-    public void setDay(String day) {
+    void setDay(String day) {
         this.day = day;
     }
 
@@ -59,6 +60,7 @@ public class LessonsListAdapter extends BaseAdapter {
         return lessons.get(i).getNumber();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int i, View view, final ViewGroup viewGroup) {
         if (view == null){
