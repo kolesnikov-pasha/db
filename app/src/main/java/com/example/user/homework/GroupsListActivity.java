@@ -2,12 +2,12 @@ package com.example.user.homework;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -181,7 +181,6 @@ public class GroupsListActivity extends AppCompatActivity {
                 assert user != null;
                 currentUser = user;
                 if (txtName != null) txtName.setText(currentUser.getName() + " " + currentUser.getSurname());
-                //listView.setAdapter(new GroupsAdapter(currentUser.getGroups(), getApplicationContext()));
                 for (String uid : user.getGroups()) {
                     DatabaseReference toGroup = FirebaseDatabase.getInstance().getReference().child(uid);
                     toGroup.child("Name").addValueEventListener(new ValueEventListener() {
@@ -196,8 +195,7 @@ public class GroupsListActivity extends AppCompatActivity {
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             groups.add(new Group(dataSnapshot.getValue(String.class), uid));
-                            ArrayList<Group> gg = new ArrayList<>();
-                            gg.addAll(groups);
+                            ArrayList<Group> gg = new ArrayList<>(groups);
                             listView.setAdapter(new GroupsAdapter(gg, getApplicationContext()));
                         }
                     });

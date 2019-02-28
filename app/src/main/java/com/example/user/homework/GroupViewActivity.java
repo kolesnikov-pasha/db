@@ -1,17 +1,15 @@
 package com.example.user.homework;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -132,89 +130,65 @@ public class GroupViewActivity extends AppCompatActivity{
         });
         btnBurger = findViewById(R.id.btn_burger);
         btnCalendar = findViewById(R.id.btn_calendar);
-        btnBurger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        btnBurger.setOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
 
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(DIALOG_DATE);
-            }
-        });
+        btnCalendar.setOnClickListener(v -> showDialog(DIALOG_DATE));
 
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Intent intent = new Intent();
-                switch (menuItem.getItemId()){
-                    case R.id.menu_add: {
-                        intent = new Intent(getApplicationContext(), AddNewTaskActivity.class);
-                        break;
-                    }
-                    case R.id.menu_edit: {
-                        intent = new Intent(getApplicationContext(), AdminOptionsActivity.class);
-                        break;
-                    }
-                    case R.id.menu_account_settings: {
-                        return false;
-                    }
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            Intent intent = new Intent();
+            switch (menuItem.getItemId()){
+                case R.id.menu_add: {
+                    intent = new Intent(getApplicationContext(), AddNewTaskActivity.class);
+                    break;
                 }
-                intent.putExtra("GROUPID", groupId);
-                if (isAdmin) startActivity(intent);
-                else {
-                    Toast.makeText(getApplicationContext(), "Вы не администратор группы", Toast.LENGTH_SHORT).show();
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                case R.id.menu_edit: {
+                    intent = new Intent(getApplicationContext(), AdminOptionsActivity.class);
+                    break;
                 }
-                return false;
+                case R.id.menu_account_settings: {
+                    return false;
+                }
             }
+            intent.putExtra("GROUPID", groupId);
+            if (isAdmin) startActivity(intent);
+            else {
+                Toast.makeText(getApplicationContext(), "Вы не администратор группы", Toast.LENGTH_SHORT).show();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+            return false;
         });
         lessonsList = findViewById(R.id.list_lessons_main);
-        Date = findViewById(R.id.main_date);
-        DayOfWeek = findViewById(R.id.main_day_of_week);
+        Date = findViewById(R.id.date);
+        DayOfWeek = findViewById(R.id.day_of_week);
 
-        nextDay = findViewById(R.id.main_next_day);
-        prevDay = findViewById(R.id.main_prev_day);
-        chooseDate = findViewById(R.id.main_choose_date);
+        nextDay = findViewById(R.id.next_day);
+        prevDay = findViewById(R.id.prev_day);
+        chooseDate = findViewById(R.id.choose_date);
 
         lessonsList.setAdapter(new LessonsListAdapter(lessonArrayList, getApplicationContext()));
 
-        chooseDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog(DIALOG_DATE);
-            }
-        });
+        chooseDate.setOnClickListener(view -> showDialog(DIALOG_DATE));
 
-        nextDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextDay();
-                String date = Date.getText().toString();
-                String dayOfWeek = DayOfWeek.getText().toString();
-                date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
-                myDay = Integer.valueOf(date.substring(0, 2));
-                myMonth = Integer.valueOf(date.substring(2, 4));
-                myYear = Integer.valueOf(date.substring(4, 8));
-                adaptMain(date, dayOfWeek);
-            }
+        nextDay.setOnClickListener(v -> {
+            nextDay();
+            String date = Date.getText().toString();
+            String dayOfWeek = DayOfWeek.getText().toString();
+            date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
+            myDay = Integer.valueOf(date.substring(0, 2));
+            myMonth = Integer.valueOf(date.substring(2, 4));
+            myYear = Integer.valueOf(date.substring(4, 8));
+            adaptMain(date, dayOfWeek);
         });
-        prevDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prevDay();
-                String date = Date.getText().toString();
-                String dayOfWeek = DayOfWeek.getText().toString();
-                date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
-                myDay = Integer.valueOf(date.substring(0, 2));
-                myMonth = Integer.valueOf(date.substring(2, 4));
-                myYear = Integer.valueOf(date.substring(4, 8));
-                adaptMain(date, dayOfWeek);
-            }
+        prevDay.setOnClickListener(v -> {
+            prevDay();
+            String date = Date.getText().toString();
+            String dayOfWeek = DayOfWeek.getText().toString();
+            date = date.substring(0, 2) + date.substring(3, 5) + date.substring(6, 10);
+            myDay = Integer.valueOf(date.substring(0, 2));
+            myMonth = Integer.valueOf(date.substring(2, 4));
+            myYear = Integer.valueOf(date.substring(4, 8));
+            adaptMain(date, dayOfWeek);
         });
 
         reference.child("Name").addValueEventListener(new ValueEventListener() {
