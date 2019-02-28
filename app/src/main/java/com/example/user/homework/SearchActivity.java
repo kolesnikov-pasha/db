@@ -2,9 +2,8 @@ package com.example.user.homework;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,16 +22,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
-class GroupView{
+class GroupView implements Comparable<GroupView>{
+
     String name, uid;
 
     public GroupView() {
     }
 
-    public GroupView(String name, String uid) {
+    GroupView(String name, String uid) {
         this.name = name;
         this.uid = uid;
     }
@@ -45,14 +46,7 @@ class GroupView{
         this.name = name;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "GroupView{" +
@@ -60,29 +54,19 @@ class GroupView{
                 ", id='" + uid + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(@NonNull GroupView o) {
+        if (name.equals(o.name)) {
+            return uid.compareTo(o.uid);
+        }
+        else {
+            return name.compareTo(o.name);
+        }
+    }
 }
 
 class SearchEngine{
-
-    private static class Pair implements Comparable<Pair>{
-        String s, t;
-
-        Pair(String s, String t) {
-            this.s = s;
-            this.t = t;
-        }
-
-
-        @Override
-        public int compareTo(Pair o) {
-            if (s.equals(o.s)) {
-                return t.compareTo(o.t);
-            }
-            else {
-                return s.compareTo(o.s);
-            }
-        }
-    }
 
     static class PairForSort implements Comparable<PairForSort>{
 
@@ -91,7 +75,7 @@ class SearchEngine{
         Double v;
 
         @Override
-        public int compareTo(PairForSort o) {
+        public int compareTo(@NonNull PairForSort o) {
             return v.compareTo(o.v);
         }
 
@@ -102,11 +86,12 @@ class SearchEngine{
         }
     }
 
-    private static Map<Pair, Integer> res = new TreeMap<>();
+    private static Map<GroupView, Integer> res = new TreeMap<>();
 
     static int levensteinDelta(String s, String t){
-        if (res.containsKey(new Pair(s, t))){
-            return res.get(new Pair(s, t));
+        GroupView groupView = new GroupView(s, t);
+        if (res.containsKey(groupView)){
+            return res.get(groupView);
         }
         if (s.equals(t)){
             return 0;
@@ -116,7 +101,7 @@ class SearchEngine{
         }
         int result =  Math.min(Math.min(levensteinDelta(s.substring(0, s.length()-1), t) + 1, levensteinDelta(s, t.substring(0, t.length()-1)) + 1),
                 levensteinDelta(s.substring(0, s.length()-1), t.substring(0, t.length()-1)) + (s.charAt(s.length() - 1) == t.charAt(t.length() - 1) ? 0 : 1));
-        res.put(new Pair(s, t), result);
+        res.put(groupView, result);
         return result;
     }
 
@@ -175,14 +160,12 @@ class SearchAdapter extends BaseAdapter {
             ((TextView) view.findViewById(R.id.txt_group_view_uid)).setText(groups.get(position).uid);
             ((TextView) view.findViewById(R.id.txt_group_view_name)).setText(groups.get(position).name);
         }
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, GroupPasswordActivity.class);
-                intent.putExtra("NAME", groups.get(position).name);
-                intent.putExtra("UID", groups.get(position).uid);
-                context.startActivity(intent);
-            }
+        assert view != null;
+        view.setOnClickListener(v -> {
+            Intent intent = new Intent(context, GroupPasswordActivity.class);
+            intent.putExtra("NAME", groups.get(position).name);
+            intent.putExtra("UID", groups.get(position).uid);
+            context.startActivity(intent);
         });
         return view;
     }
@@ -277,32 +260,30 @@ public class SearchActivity extends AppCompatActivity {
         });
 
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                if (!String.valueOf(edtSearch.getText()).isEmpty()) {
-                    String search = String.valueOf(edtSearch.getText());
-                    ArrayList<SearchEngine.PairForSort> sort = new ArrayList<>();
-                    adapterList.clear();
-                    for (int i = 0; i < list.size(); i++) {
-                        int value = SearchEngine.levensteinDelta(list.get(i).name, search);
-                        if (value <= 2) {
-                            sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
-                                    (double) value));
-                        } else if (SearchEngine.maxCommonSubstring(list.get(i).name, search) == search.length()) {
-                            sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
-                                    (double) value));
-                        }
+        button.setOnClickListener(v -> {
+            if (!String.valueOf(edtSearch.getText()).isEmpty()) {
+                String search = String.valueOf(edtSearch.getText());
+                ArrayList<SearchEngine.PairForSort> sort = new ArrayList<>();
+                adapterList.clear();
+                for (int i = 0; i < list.size(); i++) {
+                    int value = SearchEngine.levensteinDelta(list.get(i).name, search);
+                    if (value <= 2) {
+                        sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
+                                (double) value));
+                    } else if (SearchEngine.maxCommonSubstring(list.get(i).name, search) == search.length()) {
+                        sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
+                                (double) value));
                     }
-                    sort.sort(SearchEngine.PairForSort::compareTo);
-                    for (SearchEngine.PairForSort pair : sort) {
-                        adapterList.add(new GroupView(pair.s, pair.uid));
-                    }
-                    listView.setAdapter(new SearchAdapter(adapterList, SearchActivity.this.getApplicationContext()));
-                } else {
-                    listView.setAdapter(new SearchAdapter(list, SearchActivity.this.getApplicationContext()));
                 }
+                SearchEngine.PairForSort sorted[] = (SearchEngine.PairForSort[]) sort.toArray();
+                assert sorted != null;
+                Arrays.sort(sorted);
+                for (SearchEngine.PairForSort pair : sorted) {
+                    adapterList.add(new GroupView(pair.s, pair.uid));
+                }
+                listView.setAdapter(new SearchAdapter(adapterList, SearchActivity.this.getApplicationContext()));
+            } else {
+                listView.setAdapter(new SearchAdapter(list, SearchActivity.this.getApplicationContext()));
             }
         });
 
