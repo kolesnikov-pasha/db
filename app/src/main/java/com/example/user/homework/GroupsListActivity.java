@@ -129,7 +129,7 @@ public class GroupsListActivity extends AppCompatActivity {
     ImageButton btnBurger;
     DrawerLayout mDrawerLayout;
     NavigationView navigationView;
-    TextView txtName;
+    TextView txtName, txtActivity;
     Set<Group> groups = new TreeSet<>();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -144,31 +144,34 @@ public class GroupsListActivity extends AppCompatActivity {
         btnBurger = findViewById(R.id.btn_burger_groups);
         mDrawerLayout = findViewById(R.id.groups_list_layout);
         navigationView = findViewById(R.id.groups_menu);
+        txtActivity = findViewById(R.id.app_bar_main);
         txtName = navigationView.getHeaderView(0).findViewById(R.id.txt_name);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.nav_find_groups:{
-                        startActivity(new Intent(getApplicationContext(), SearchActivity.class));
-                        break;
-                    }
-                    case R.id.nav_my_groups:{
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    }
-                    case R.id.nav_settings:{
-                        startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
-                        break;
-                    }
-                    case R.id.nav_add_group:{
-                        startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
-                        break;
-                    }
+
+        txtActivity.setText("Мои группы");
+
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()){
+                case R.id.nav_find_groups:{
+                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                    break;
                 }
-                return false;
+                case R.id.nav_my_groups:{
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                }
+                case R.id.nav_settings:{
+                    startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
+                    break;
+                }
+                case R.id.nav_add_group:{
+                    startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
+                    break;
+                }
             }
+            return false;
         });
+
+
         btnBurger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

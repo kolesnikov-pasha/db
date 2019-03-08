@@ -22,7 +22,7 @@ public class EditHometaskActivity extends AppCompatActivity {
     ImageButton btnBack, btnAddAttachments;
     String task, day;
     EditText edtHometask;
-    TextView txtLesson, txtDate;
+    TextView txtLesson, txtDate, txtActivity;
     int number;
     String groupId;
     Button btnAdd;
@@ -33,6 +33,7 @@ public class EditHometaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_hometask);
+        txtActivity = findViewById(R.id.add_group_name);
         edtHometask = findViewById(R.id.add_edt_task);
         txtLesson = findViewById(R.id.chosen_lesson_name);
         txtDate = findViewById(R.id.chosen_date);
@@ -50,6 +51,9 @@ public class EditHometaskActivity extends AppCompatActivity {
         Log.e("DAY", day);
         Log.e("NUMBER", number + "");
         reference = reference.child("task").child(day).child(String.valueOf(number));
+
+        txtActivity.setText("Редактировать задание");
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -23,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:padding="11dp"
-            android:text="Homework"
+            android:text=""
             android:textColor="@color/iconsColor"
             android:textSize="24sp"
             android:textStyle="bold"/>

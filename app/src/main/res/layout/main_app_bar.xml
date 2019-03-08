@@ -10,6 +10,17 @@
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
         android:background="@color/colorPrimaryDark">
+        <TextView
+            android:id="@+id/app_bar_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="11dp"
+            android:text=""
+            android:textColor="@color/iconsColor"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
         <ImageButton
             android:layout_width="24dp"
             android:layout_height="24dp"

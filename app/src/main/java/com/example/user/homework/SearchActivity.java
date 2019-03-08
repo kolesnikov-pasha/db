@@ -7,18 +7,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -194,12 +198,16 @@ class SearchAdapter extends BaseAdapter {
 
 public class SearchActivity extends AppCompatActivity {
 
+    ImageButton btnBurger;
+    DrawerLayout mDrawerLayout;
+    NavigationView navigationView;
     ListView listView;
     EditText edtSearch;
     ImageButton button;
     ArrayList<GroupView> list = new ArrayList<>();
     ArrayList<GroupView> adapterList = new ArrayList<>();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("groups");
+    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
 
@@ -211,6 +219,69 @@ public class SearchActivity extends AppCompatActivity {
         listView = findViewById(R.id.groups_search_list);
         edtSearch = findViewById(R.id.edt_search);
         listView.setAdapter(new SearchAdapter(list, getApplicationContext()));
+        btnBurger = findViewById(R.id.btn_burger_groups);
+        mDrawerLayout = findViewById(R.id.nav_bar);
+        navigationView = findViewById(R.id.groups_menu);
+
+        btnBurger.setOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
+
+        FirebaseDatabase.getInstance().getReference().child("users").child(uid).addChildEventListener(new ChildEventListener() {
+
+            void getData(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                assert user != null;
+                ((TextView) navigationView.getHeaderView(0).findViewById(R.id.txt_name)).setText(user.getName() + " " + user.getSurname());
+            }
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                getData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                getData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()){
+                case R.id.nav_find_groups:{
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                    break;
+                }
+                case R.id.nav_my_groups:{
+                    startActivity(new Intent(getApplicationContext(), GroupsListActivity.class));
+                    break;
+                }
+                case R.id.nav_settings:{
+                    startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
+                    break;
+                }
+                case R.id.nav_add_group:{
+                    startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
+                    break;
+                }
+            }
+            return false;
+        });
+
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

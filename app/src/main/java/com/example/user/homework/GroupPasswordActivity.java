@@ -1,11 +1,15 @@
 package com.example.user.homework;
 
 import android.annotation.SuppressLint;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class GroupPasswordActivity extends AppCompatActivity {
 
+    ImageButton btnBurger;
+    DrawerLayout mDrawerLayout;
     TextView txtName;
     Button btnSignIn;
     Integer number = 0;
@@ -45,6 +51,8 @@ public class GroupPasswordActivity extends AppCompatActivity {
         btnSignIn = findViewById(R.id.btn_sign_in_password);
         edtPassword = findViewById(R.id.edt_group_password);
         txtName.setText("Пароль для группы \n" + name + ":");
+        btnBurger = findViewById(R.id.btn_burger_groups);
+        mDrawerLayout = findViewById(R.id.nav_bar_group_password);
         reference.child("users").child(userId).child("userInformation").child("createCount").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -54,9 +62,16 @@ public class GroupPasswordActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
+
+        btnBurger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
         reference.child(id).child("Password").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

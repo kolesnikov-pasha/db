@@ -160,9 +160,6 @@ public class GroupViewActivity extends AppCompatActivity{
                         intent = new Intent(getApplicationContext(), AdminOptionsActivity.class);
                         break;
                     }
-                    case R.id.menu_account_settings: {
-                        return false;
-                    }
                 }
                 intent.putExtra("GROUPID", groupId);
                 if (isAdmin) startActivity(intent);
