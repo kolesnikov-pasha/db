@@ -3,7 +3,6 @@ package com.example.user.homework;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,16 +10,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -32,9 +28,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
-class GroupView{
+class GroupView implements Comparable<GroupView>{
     String name, uid;
 
     public GroupView() {
@@ -67,6 +65,11 @@ class GroupView{
                 "name='" + name + '\'' +
                 ", id='" + uid + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(GroupView o) {
+        return uid.compareTo(o.uid);
     }
 }
 
@@ -204,7 +207,7 @@ public class SearchActivity extends AppCompatActivity {
     ListView listView;
     EditText edtSearch;
     ImageButton button;
-    ArrayList<GroupView> list = new ArrayList<>();
+    Set<GroupView> list = new TreeSet<>();
     ArrayList<GroupView> adapterList = new ArrayList<>();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("groups");
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -218,7 +221,7 @@ public class SearchActivity extends AppCompatActivity {
         button = findViewById(R.id.btn_search);
         listView = findViewById(R.id.groups_search_list);
         edtSearch = findViewById(R.id.edt_search);
-        listView.setAdapter(new SearchAdapter(list, getApplicationContext()));
+        listView.setAdapter(new SearchAdapter(new ArrayList<>(list), getApplicationContext()));
         btnBurger = findViewById(R.id.btn_burger_groups);
         mDrawerLayout = findViewById(R.id.nav_bar);
         navigationView = findViewById(R.id.groups_menu);
@@ -297,6 +300,9 @@ public class SearchActivity extends AppCompatActivity {
                         assert name[0] != null;
                         GroupView group = new GroupView(name[0], uid);
                         list.add(group);
+                        if (edtSearch.getText().toString().isEmpty()) {
+                            listView.setAdapter(new SearchAdapter(new ArrayList<>(list), SearchActivity.this.getApplicationContext()));
+                        }
                     }
 
                     @Override
@@ -305,6 +311,9 @@ public class SearchActivity extends AppCompatActivity {
                         assert name[0] != null;
                         GroupView group = new GroupView(name[0], uid);
                         list.add(group);
+                        if (edtSearch.getText().toString().isEmpty()) {
+                            listView.setAdapter(new SearchAdapter(new ArrayList<>(list), SearchActivity.this.getApplicationContext()));
+                        }
                     }
                 });
             }
@@ -323,6 +332,9 @@ public class SearchActivity extends AppCompatActivity {
                         assert name[0] != null;
                         GroupView group = new GroupView(name[0], uid);
                         list.add(group);
+                        if (edtSearch.getText().toString().isEmpty()) {
+                            listView.setAdapter(new SearchAdapter(new ArrayList<>(list), SearchActivity.this.getApplicationContext()));
+                        }
                     }
 
                     @Override
@@ -331,6 +343,9 @@ public class SearchActivity extends AppCompatActivity {
                         assert name[0] != null;
                         GroupView group = new GroupView(name[0], uid);
                         list.add(group);
+                        if (edtSearch.getText().toString().isEmpty()) {
+                            listView.setAdapter(new SearchAdapter(new ArrayList<>(list), SearchActivity.this.getApplicationContext()));
+                        }
                     }
                 });
             }
@@ -360,14 +375,13 @@ public class SearchActivity extends AppCompatActivity {
                     String search = String.valueOf(edtSearch.getText());
                     ArrayList<SearchEngine.PairForSort> sort = new ArrayList<>();
                     adapterList.clear();
-                    for (int i = 0; i < list.size(); i++) {
-                        int value = SearchEngine.levensteinDelta(list.get(i).name, search);
+                    for (GroupView g : list) {
+                        int value = SearchEngine.levensteinDelta(g.name, search);
                         if (value <= 2) {
-                            sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
+                            sort.add(new SearchEngine.PairForSort(g.name, g.uid,
                                     (double) value));
-                        } else if (SearchEngine.maxCommonSubstring(list.get(i).name, search) == search.length()) {
-                            sort.add(new SearchEngine.PairForSort(list.get(i).name, list.get(i).uid,
-                                    (double) value));
+                        } else if (SearchEngine.maxCommonSubstring(g.name, search) == search.length()) {
+                            sort.add(new SearchEngine.PairForSort(g.name, g.uid, (double) value));
                         }
                     }
                     sort.sort(SearchEngine.PairForSort::compareTo);
@@ -376,7 +390,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     listView.setAdapter(new SearchAdapter(adapterList, SearchActivity.this.getApplicationContext()));
                 } else {
-                    listView.setAdapter(new SearchAdapter(list, SearchActivity.this.getApplicationContext()));
+                    listView.setAdapter(new SearchAdapter(new ArrayList<>(list), SearchActivity.this.getApplicationContext()));
                 }
             }
         });
