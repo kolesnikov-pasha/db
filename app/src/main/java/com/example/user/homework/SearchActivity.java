@@ -3,12 +3,12 @@ package com.example.user.homework;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -205,6 +205,7 @@ public class SearchActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     NavigationView navigationView;
     ListView listView;
+    TextView txtAct;
     EditText edtSearch;
     ImageButton button;
     Set<GroupView> list = new TreeSet<>();
@@ -224,7 +225,10 @@ public class SearchActivity extends AppCompatActivity {
         listView.setAdapter(new SearchAdapter(new ArrayList<>(list), getApplicationContext()));
         btnBurger = findViewById(R.id.btn_burger_groups);
         mDrawerLayout = findViewById(R.id.nav_bar);
+        txtAct = findViewById(R.id.app_bar_main);
         navigationView = findViewById(R.id.groups_menu);
+
+        txtAct.setText("Поиск");
 
         btnBurger.setOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
 

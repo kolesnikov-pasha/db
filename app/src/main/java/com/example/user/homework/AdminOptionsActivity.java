@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +24,7 @@ public class AdminOptionsActivity extends AppCompatActivity {
     EditText edtChangeName;
     Button btnSafeChanges;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-    TextView GroupName;
+    TextView GroupName, txtAct;
     Spinner chooseDayOfWeek;
     EditText  edtLesson0, edtLesson1, edtLesson2, edtLesson3, edtLesson4, edtLesson5, edtLesson6,
             edtLesson7, edtLesson8, edtLesson9;
@@ -55,7 +54,10 @@ public class AdminOptionsActivity extends AppCompatActivity {
         edtChangeName = findViewById(R.id.admin_options_edt_NewName);
         btnSafeChanges = findViewById(R.id.admin_options_btn_safe);
         GroupName = findViewById(R.id.add_group_name);
+        txtAct = findViewById(R.id.add_group_name);
         chooseDayOfWeek = findViewById(R.id.admin_options_set_day_of_week);
+
+        txtAct.setText("Редактировать группу");
 
         edtLesson0 = findViewById(R.id.admin_options_edt_0);
         edtLesson1 = findViewById(R.id.admin_options_edt_1);

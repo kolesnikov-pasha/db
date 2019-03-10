@@ -1,9 +1,9 @@
 package com.example.user.homework;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -158,6 +158,10 @@ public class GroupViewActivity extends AppCompatActivity{
                     }
                     case R.id.menu_edit: {
                         intent = new Intent(getApplicationContext(), AdminOptionsActivity.class);
+                        break;
+                    }
+                    case R.id.menu_return: {
+                        intent = new Intent(getApplicationContext(), GroupsListActivity.class);
                         break;
                     }
                 }

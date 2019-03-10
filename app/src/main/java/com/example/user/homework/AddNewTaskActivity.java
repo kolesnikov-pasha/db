@@ -29,7 +29,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
     DatabaseReference reference = firebaseDatabase.getReference();
 
     TextView txtDayOfWeek;
-    TextView edtDay, chosenLesson, GroupName;
+    TextView edtDay, chosenLesson, GroupName, txtAct;
     String strLesson = "";
     int i;
     EditText edtTask;
@@ -49,6 +49,10 @@ public class AddNewTaskActivity extends AppCompatActivity {
         final String groupId = bundle.getString("GROUPID");
         reference = reference.child(groupId).child("lessonsSchedule");
         chooseDate = findViewById(R.id.add_layout_choose_date);
+        txtAct = findViewById(R.id.add_group_name);
+
+        txtAct.setText("Выбор предмета");
+
         chooseDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
