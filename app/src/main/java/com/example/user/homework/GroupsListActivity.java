@@ -1,6 +1,5 @@
 package com.example.user.homework;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +16,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -67,12 +64,13 @@ class Group implements Comparable<Group>{
         this.id = id;
     }
 
-    Group(String name, String id) {
+    public Group() {}
+
+    public Group(String name, String id, String password, ArrayList<String> admin) {
         this.name = name;
         this.id = id;
-    }
-
-    public Group() {
+        this.password = password;
+        this.admin = admin;
     }
 
     @Override
@@ -82,16 +80,12 @@ class Group implements Comparable<Group>{
 }
 
 class GroupsAdapter extends BaseAdapter {
+    private List<Group> groups = new ArrayList<>();
 
-    private ArrayList<Group> groups = new ArrayList<>();
-    private Context context;
-    private LayoutInflater layoutInflater;
-
-
-    GroupsAdapter(ArrayList<Group> groups, Context context) {
-        if (groups != null) this.groups = groups;
-        this.context = context;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    GroupsAdapter(Collection<Group> groups) {
+        if (groups != null) {
+            this.groups = new ArrayList<>(groups);
+        }
     }
 
     @Override
@@ -111,8 +105,9 @@ class GroupsAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View view, ViewGroup parent) {
+        final Context context = parent.getContext();
         if (view == null){
-            view = layoutInflater.inflate(R.layout.groups_list_item, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.groups_list_item, parent, false);
         }
         ((TextView) view.findViewById(R.id.txt_item_name)).setText(groups.get(position).getName());
         view.setOnClickListener(v -> {
@@ -125,23 +120,18 @@ class GroupsAdapter extends BaseAdapter {
 }
 
 public class GroupsListActivity extends AppCompatActivity {
-
     ListView listView;
     ImageButton btnBurger;
     DrawerLayout mDrawerLayout;
     NavigationView navigationView;
     TextView txtName;
     Set<Group> groups = new TreeSet<>();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-    String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups_list);
         listView = findViewById(R.id.groups_list);
-        currentUser = new User("", "", "", new ArrayList<>());
         btnBurger = findViewById(R.id.btn_burger_groups);
         mDrawerLayout = findViewById(R.id.groups_list_layout);
         navigationView = findViewById(R.id.groups_menu);
@@ -168,56 +158,27 @@ public class GroupsListActivity extends AppCompatActivity {
             return false;
         });
         btnBurger.setOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
-        reference.child("users").child(uid).addChildEventListener(new ChildEventListener() {
-            @SuppressLint("SetTextI18n")
-            void getData(DataSnapshot dataSnapshot){
-                User user = dataSnapshot.getValue(User.class);
-                assert user != null;
-                currentUser = user;
-                if (txtName != null) txtName.setText(currentUser.getName() + " " + currentUser.getSurname());
-                for (String uid : user.getGroups()) {
-                    DatabaseReference toGroup = FirebaseDatabase.getInstance().getReference().child(uid);
-                    toGroup.child("Name").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            groups.add(new Group(dataSnapshot.getValue(String.class), uid));
-                            ArrayList<Group> gg = new ArrayList<>(groups);
-                            listView.setAdapter(new GroupsAdapter(gg, getApplicationContext()));
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            groups.add(new Group(dataSnapshot.getValue(String.class), uid));
-                            ArrayList<Group> gg = new ArrayList<>(groups);
-                            listView.setAdapter(new GroupsAdapter(gg, getApplicationContext()));
-                        }
-                    });
-                }
+        ((HomeworkApplication) getApplication()).addUserListener(user -> {
+            if (txtName != null) {
+                txtName.setText(user.getName() + " " + user.getSurname());
             }
-
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                getData(dataSnapshot);
+            Log.i("KEK", user.toString());
+            List<String> groupsArray = user.getGroups();
+            if (groupsArray == null) {
+                return;
             }
+            for (String uid : groupsArray) {
+                DatabaseReference groupReference = FirebaseDatabase.getInstance().getReference().child(uid);
+                groupReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        groups.add(dataSnapshot.getValue(Group.class));
+                        listView.setAdapter(new GroupsAdapter(groups));
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                getData(dataSnapshot);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
             }
         });
     }

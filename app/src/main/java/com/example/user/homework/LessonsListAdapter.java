@@ -70,21 +70,19 @@ public class LessonsListAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.txt_lesson)).setText(lessons.get(i).getLesson());
         ((TextView) view.findViewById(R.id.txt_task)).setText(lessons.get(i).getHomework());
         final int x = i;
-        view.findViewById(R.id.btn_edit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isAdmin) {
-                    Intent intent = new Intent(context, EditHometaskActivity.class);
-                    intent.putExtra("Lesson", lessons.get(x).getLesson());
-                    intent.putExtra("Lesson number", lessons.get(x).getNumber());
-                    intent.putExtra("Day", day);
-                    intent.putExtra("GROUPID", groupId);
-                    Log.e("DAY_ADAPTER", day);
-                    context.startActivity(intent);
-                }
-                else {
-                    Toast.makeText(context, "Вы не администратор", Toast.LENGTH_SHORT).show();
-                }
+        view.findViewById(R.id.btn_edit).setOnClickListener(v -> {
+            if (isAdmin) {
+                Intent intent = new Intent(context, EditHometaskActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Lesson", lessons.get(x).getLesson());
+                intent.putExtra("Lesson number", lessons.get(x).getNumber());
+                intent.putExtra("Day", day);
+                intent.putExtra("GROUPID", groupId);
+                Log.e("DAY_ADAPTER", day);
+                context.startActivity(intent);
+            }
+            else {
+                Toast.makeText(context, "Вы не администратор", Toast.LENGTH_SHORT).show();
             }
         });
         return view;

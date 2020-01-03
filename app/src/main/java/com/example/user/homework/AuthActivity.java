@@ -25,7 +25,7 @@ public class AuthActivity extends AppCompatActivity {
         if (email.isEmpty()) Toast.makeText(this, "Email не введен", Toast.LENGTH_SHORT).show();
         else if (password.isEmpty()) Toast.makeText(this, "Пароль не введен", Toast.LENGTH_SHORT).show();
         else {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getParent(), task -> {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
                 if (task.isSuccessful()){
                     sharedPreferences = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -51,7 +51,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     protected void defaultSigning(final String email, final String password){
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getParent(), task -> {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()){
                 user = mAuth.getCurrentUser();
                 assert user != null;
@@ -85,7 +85,9 @@ public class AuthActivity extends AppCompatActivity {
         String email = sharedPreferences.getString("EMAIL", "");
         String password = sharedPreferences.getString("PASSWORD", "");
 
-        if (!email.isEmpty() && !password.isEmpty()) defaultSigning(email, password);
+        if (password != null && email != null && !email.isEmpty() && !password.isEmpty()) {
+            defaultSigning(email, password);
+        }
 
         Button signIn = findViewById(R.id.btn_sign_in);
         TextView txtRegistration = findViewById(R.id.btn_registration);

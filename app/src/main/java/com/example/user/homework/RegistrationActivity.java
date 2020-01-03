@@ -63,7 +63,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 String uid = user.getUid();
                 database.getReference().child("users").child(uid).child("userInformation")
                         .setValue(new User(edtName.getText().toString(),
-                                edtSurname.getText().toString(), email, new ArrayList<>()));
+                                edtSurname.getText().toString(), email, new ArrayList<>(), 0));
                 user.sendEmailVerification().addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()){
                         Toast.makeText(getApplicationContext(), "На адрес " + email +
