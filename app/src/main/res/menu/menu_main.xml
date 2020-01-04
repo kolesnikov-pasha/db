@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/menu_account_settings"
+            android:title="В главное меню"
+            android:icon="@drawable/baseline_account_box_black_48dp"/>
+        <item
             android:id="@+id/menu_add"
             android:icon="@drawable/baseline_add_box_black_48dp"
             android:title="Добавить задание" />
@@ -12,10 +16,6 @@
             android:id="@+id/menu_edit"
             android:icon="@drawable/baseline_edit_black_48dp"
             android:title="Редактировать класс"/>
-        <item
-            android:id="@+id/menu_account_settings"
-            android:title="Настройки аккаунта"
-            android:icon="@drawable/baseline_account_box_black_48dp"/>
     </group>
 
 </menu>

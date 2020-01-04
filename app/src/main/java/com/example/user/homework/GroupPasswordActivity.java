@@ -1,6 +1,5 @@
 package com.example.user.homework;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -32,8 +31,6 @@ public class GroupPasswordActivity extends AppCompatActivity {
         reference.child("createCount").setValue(number + 1);
     }
 
-
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

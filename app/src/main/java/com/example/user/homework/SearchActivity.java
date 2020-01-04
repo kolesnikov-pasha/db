@@ -105,11 +105,12 @@ public class SearchActivity extends AppCompatActivity {
         edtSearch = findViewById(R.id.edt_search);
         listView.setAdapter(new SearchAdapter(list, getApplicationContext()));
         reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            private void getData(DataSnapshot dataSnapshot) {
                 String uid = dataSnapshot.getValue(String.class);
                 final String[] name = {""};
-                assert uid != null;
+                if (uid == null) {
+                    return;
+                }
                 System.out.println(uid);
                 DatabaseReference toGroup = FirebaseDatabase.getInstance().getReference();
                 toGroup.child(uid).child("Name").addValueEventListener(new ValueEventListener() {
@@ -132,29 +133,13 @@ public class SearchActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String uid = dataSnapshot.getValue(String.class);
-                final String[] name = {""};
-                assert uid != null;
-                System.out.println(uid);
-                DatabaseReference toGroup = FirebaseDatabase.getInstance().getReference();
-                toGroup.child(uid).child("Name").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        name[0] = dataSnapshot.getValue(String.class);
-                        assert name[0] != null;
-                        SearchGroupModel group = new SearchGroupModel(name[0], uid);
-                        list.add(group);
-                    }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                getData(dataSnapshot);
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        name[0] = dataSnapshot.getValue(String.class);
-                        assert name[0] != null;
-                        SearchGroupModel group = new SearchGroupModel(name[0], uid);
-                        list.add(group);
-                    }
-                });
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                getData(dataSnapshot);
             }
 
             @Override

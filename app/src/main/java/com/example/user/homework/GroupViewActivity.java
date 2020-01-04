@@ -8,7 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -36,10 +36,9 @@ public class GroupViewActivity extends AppCompatActivity{
     private ListView lessonsList;
     private NavigationView navigationView;
     private DrawerLayout mDrawerLayout;
-
-    private String groupId = "", uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String groupId = "";
+    private String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private DatabaseReference reference;
-
     private Calendar calendar = Calendar.getInstance();
     private TreeSet<LessonModel> lessons = new TreeSet<>();
     private ArrayList<LessonModel> lessonArrayList = new ArrayList<>();
@@ -54,7 +53,6 @@ public class GroupViewActivity extends AppCompatActivity{
         Bundle from = getIntent().getExtras();
         assert from != null;
         groupId = from.getString("GROUPID");
-        Log.e("ID", groupId);
 
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -69,11 +67,9 @@ public class GroupViewActivity extends AppCompatActivity{
 
         reference = FirebaseDatabase.getInstance().getReference().child(groupId);
         reference.child("Admin").addChildEventListener(new ChildEventListener() {
-
             void getData(DataSnapshot dataSnapshot){
-                String get = dataSnapshot.getValue(String.class);
-                assert get != null;
-                if (get.equals(uid)) {
+                String adminId = dataSnapshot.getValue(String.class);
+                if (TextUtils.equals(adminId, uid)) {
                     ((LessonsListAdapter) lessonsList.getAdapter()).setAdmin();
                     isAdmin = true;
                 }
@@ -123,27 +119,33 @@ public class GroupViewActivity extends AppCompatActivity{
             adaptMain(date, dayOfWeek);
         });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            Intent intent = new Intent();
+            final Intent intent;
             switch (menuItem.getItemId()){
                 case R.id.menu_add: {
-                    intent = new Intent(getApplicationContext(), AddNewTaskActivity.class);
+                    intent = new Intent(this, AddNewTaskActivity.class);
                     break;
                 }
                 case R.id.menu_edit: {
-                    intent = new Intent(getApplicationContext(), AdminOptionsActivity.class);
+                    intent = new Intent(this, AdminOptionsActivity.class);
                     break;
                 }
                 case R.id.menu_account_settings: {
-                    return false;
+                    intent = new Intent(this, GroupsListActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                    startActivity(intent);
+                    return true;
                 }
+                default:
+                    return false;
             }
             intent.putExtra("GROUPID", groupId);
-            if (isAdmin) startActivity(intent);
-            else {
-                Toast.makeText(getApplicationContext(), "Вы не администратор группы", Toast.LENGTH_SHORT).show();
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+            if (isAdmin) {
+                startActivity(intent);
+                return true;
             }
-            return false;
+            Toast.makeText(getApplicationContext(), "Вы не администратор группы", Toast.LENGTH_SHORT).show();
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return true;
         });
 
         lessonsList.setAdapter(new LessonsListAdapter(lessonArrayList, getApplicationContext()));
@@ -175,14 +177,13 @@ public class GroupViewActivity extends AppCompatActivity{
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-            return new DatePickerDialog(GroupViewActivity.this, myCallBack, year, month, day);
+            return new DatePickerDialog(GroupViewActivity.this, onDateSetListener, year, month, day);
         }
         else
             return super.onCreateDialog(id);
     }
 
-    DatePickerDialog.OnDateSetListener myCallBack = new DatePickerDialog.OnDateSetListener() {
-
+    final DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
             changeDate(dayOfMonth, monthOfYear + 1, year);
