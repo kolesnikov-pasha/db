@@ -1,4 +1,4 @@
-package com.example.user.homework;
+package com.example.user.homework.models;
 
 public class FileModel {
     private String ref;

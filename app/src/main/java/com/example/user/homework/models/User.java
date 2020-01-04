@@ -1,17 +1,6 @@
-package com.example.user.homework;
-
-import android.support.annotation.NonNull;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+package com.example.user.homework.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class User implements Serializable {
@@ -31,11 +20,11 @@ public class User implements Serializable {
         this.createCount = createCount;
     }
 
-    List<String> getGroups() {
+    public List<String> getGroups() {
         return groups;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -47,7 +36,7 @@ public class User implements Serializable {
         return name;
     }
 
-    String getSurname() {
+    public String getSurname() {
         return surname;
     }
 

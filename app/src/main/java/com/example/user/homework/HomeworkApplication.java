@@ -3,6 +3,9 @@ package com.example.user.homework;
 import android.app.Application;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.example.user.homework.listeners.GroupListener;
+import com.example.user.homework.listeners.UserListener;
+import com.example.user.homework.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -10,25 +13,37 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeworkApplication extends Application implements ValueEventListener {
     @Nullable
     private User user;
+    @Nullable
+    private List<String> groupsId;
     @NonNull
-    private final List<UserListener> listeners = new ArrayList<>();
+    private final List<UserListener> userListeners = new ArrayList<>();
+    @NonNull
+    private final List<GroupListener> groupsListeners = new ArrayList<>();
 
-    void addUserListener(@NonNull final UserListener userListener) {
-        listeners.add(userListener);
+    public void addUserListener(@NonNull final UserListener userListener) {
+        userListeners.add(userListener);
         if (user != null) {
             userListener.onUserUpdate(user);
         }
     }
 
+    public void addGroupListener(@NonNull final GroupListener groupListener) {
+        groupsListeners.add(groupListener);
+        if (groupsId != null) {
+            groupListener.onUpdate(groupsId);
+        }
+    }
+
     private void updateUser(DataSnapshot dataSnapshot) {
-        user = new User();
+        if (user == null) {
+            user = new User();
+        }
         for (DataSnapshot child: dataSnapshot.getChildren()) {
             switch (child.getKey()) {
                 case "createCount":
@@ -47,8 +62,15 @@ public class HomeworkApplication extends Application implements ValueEventListen
                     user.setGroups((List<String>) child.getValue());
             }
         }
-        for (final UserListener listener: listeners) {
+        for (final UserListener listener: userListeners) {
             listener.onUserUpdate(user);
+        }
+    }
+
+    private void updateGroups(DataSnapshot dataSnapshot) {
+        groupsId = (List<String>) dataSnapshot.getValue();
+        for (final GroupListener listener: groupsListeners) {
+            listener.onUpdate(groupsId);
         }
     }
 
@@ -62,13 +84,19 @@ public class HomeworkApplication extends Application implements ValueEventListen
             }
             final DatabaseReference rootReference = FirebaseDatabase.getInstance().getReference();
             final DatabaseReference userReference = rootReference.child("users").child(currentUser.getUid()).child("userInformation");
+            final DatabaseReference groupsReference = rootReference.child("groups");
+            groupsReference.addValueEventListener(this);
             userReference.addValueEventListener(this);
         });
     }
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        updateUser(dataSnapshot);
+        if (dataSnapshot.getKey().equals("userInformation")) {
+            updateUser(dataSnapshot);
+        } else {
+            updateGroups(dataSnapshot);
+        }
     }
 
     @Override

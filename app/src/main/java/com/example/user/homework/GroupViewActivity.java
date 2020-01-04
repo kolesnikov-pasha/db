@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.homework.adapters.LessonsListAdapter;
+import com.example.user.homework.models.LessonModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,40 +30,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TreeSet;
 
-class Lesson implements Comparable<Lesson>{
-    private Integer number;
-    private String lesson, homework;
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    String getLesson() {
-        return lesson;
-    }
-
-    void setLesson(String lesson) {
-        this.lesson = lesson;
-    }
-
-    public String getHomework() {
-        return homework;
-    }
-
-    public void setHomework(String homework) {
-        this.homework = homework;
-    }
-
-    @Override
-    public int compareTo(@NonNull Lesson lesson) {
-        return number - lesson.number;
-    }
-}
-
 public class GroupViewActivity extends AppCompatActivity{
 
     private TextView txtDayOfWeek, txtDate;
@@ -74,8 +41,8 @@ public class GroupViewActivity extends AppCompatActivity{
     private DatabaseReference reference;
 
     private Calendar calendar = Calendar.getInstance();
-    private TreeSet<Lesson> lessons = new TreeSet<>();
-    private ArrayList<Lesson> lessonArrayList = new ArrayList<>();
+    private TreeSet<LessonModel> lessons = new TreeSet<>();
+    private ArrayList<LessonModel> lessonArrayList = new ArrayList<>();
     private boolean isAdmin = false;
     private final static int DIALOG_DATE = 1;
 
@@ -272,8 +239,8 @@ public class GroupViewActivity extends AppCompatActivity{
         ((LessonsListAdapter) lessonsList.getAdapter()).setGroupId(groupId);
         ((LessonsListAdapter) lessonsList.getAdapter()).notifyDataSetChanged();
         for (int i = 0; i < 10; i++) {
-            final Lesson[] lesson = new Lesson[1];
-            lesson[0] = new Lesson();
+            final LessonModel[] lesson = new LessonModel[1];
+            lesson[0] = new LessonModel();
             lesson[0].setNumber(i);
             reference.child("lessonsSchedule").child(weekDay).child(i + "").addValueEventListener(new ValueEventListener() {
                 @Override

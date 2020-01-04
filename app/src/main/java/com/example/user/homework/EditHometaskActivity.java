@@ -32,11 +32,11 @@ public class EditHometaskActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
-        String lesson = bundle.getString("Lesson");
+        String lesson = bundle.getString("LessonModel");
         groupId = bundle.getString("GROUPID");
         assert groupId != null;
         String day = bundle.getString("Day");
-        number = bundle.getInt("Lesson number");
+        number = bundle.getInt("LessonModel number");
         assert day != null;
         day = day.substring(0, 2) + day.substring(3, 5) + day.substring(6);
         Log.e("DAY", day);

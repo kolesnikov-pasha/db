@@ -98,10 +98,10 @@ public class AddNewTaskActivity extends AppCompatActivity {
         });
         btnNext.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), EditHometaskActivity.class);
-            intent.putExtra("Lesson", strLesson);
+            intent.putExtra("LessonModel", strLesson);
             intent.putExtra("GROUPID", groupId);
             intent.putExtra("Day", txtDate.getText());
-            intent.putExtra("Lesson number", lessonNumber);
+            intent.putExtra("LessonModel number", lessonNumber);
             startActivity(intent);
         });
 

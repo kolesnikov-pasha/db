@@ -1,6 +1,5 @@
-package com.example.user.homework;
+package com.example.user.homework.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -10,36 +9,36 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.user.homework.EditHometaskActivity;
+import com.example.user.homework.R;
+import com.example.user.homework.models.LessonModel;
 import java.util.ArrayList;
 
 public class LessonsListAdapter extends BaseAdapter {
-
-    private ArrayList<Lesson> lessons;
-
-
-    private String day = "", groupId = "";
+    private ArrayList<LessonModel> lessons;
+    private String day = "";
+    private String groupId = "";
     private Context context;
     private LayoutInflater layoutInflater;
     private boolean isAdmin = false;
 
-    void setAdmin() {
+    public void setAdmin() {
         isAdmin = true;
     }
 
-    void setGroupId(String groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
-    ArrayList<Lesson> getLessons() {
+    public ArrayList<LessonModel> getLessons() {
         return lessons;
     }
 
-    void setDay(String day) {
+    public void setDay(String day) {
         this.day = day;
     }
 
-    LessonsListAdapter(ArrayList<Lesson> lessons, Context context) {
+    public LessonsListAdapter(ArrayList<LessonModel> lessons, Context context) {
         this.lessons = lessons;
         this.context = context;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -60,7 +59,6 @@ public class LessonsListAdapter extends BaseAdapter {
         return lessons.get(i).getNumber();
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int i, View view, final ViewGroup viewGroup) {
         if (view == null){
@@ -74,8 +72,8 @@ public class LessonsListAdapter extends BaseAdapter {
             if (isAdmin) {
                 Intent intent = new Intent(context, EditHometaskActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Lesson", lessons.get(x).getLesson());
-                intent.putExtra("Lesson number", lessons.get(x).getNumber());
+                intent.putExtra("LessonModel", lessons.get(x).getLesson());
+                intent.putExtra("LessonModel number", lessons.get(x).getNumber());
                 intent.putExtra("Day", day);
                 intent.putExtra("GROUPID", groupId);
                 Log.e("DAY_ADAPTER", day);
