@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,107 +9,50 @@
 
     <include layout="@layout/app_bar_for_add"/>
 
-    <android.support.constraint.ConstraintLayout
+    <include layout="@layout/choose_date_bar"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/choose_day_lesson"
-            android:orientation="vertical"
-            android:visibility="visible">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:id="@+id/qwertyuiop"
-                android:background="@color/colorPrimary">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_new_hometask_prev_day"
-                    android:background="@drawable/ic_keyboard_arrow_left_white_24dp"
-                    android:layout_alignParentLeft="true"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_layout_choose_date"
-                    android:layout_centerHorizontal="true"
-
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Понедельник"
-                        android:textSize="20sp"
-                        android:gravity="center_horizontal"
-                        android:textColor="#FFF"
-                        android:id="@+id/add_new_hometask_day_of_week"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:id="@+id/add_new_hometask_date"
-                        android:textColor="#FFF"
-                        android:textSize="16sp"
-                        android:text="22.02.2022"/>
-                </LinearLayout>
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_new_hometask_next_day"
-                    android:background="@drawable/ic_keyboard_arrow_right_white_24dp"
-                    android:layout_alignParentRight="true"/>
-            </RelativeLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_below="@+id/qwertyuiop"
-                android:id="@+id/add_hometask_table"
-                android:layout_height="wrap_content">
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_0"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_1"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_2"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_3"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_4"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_5"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_6"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_7"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_8"/>
-                <include
-                    layout="@layout/choose_lesson_item"
-                    android:id="@+id/lesson_choose_9"/>
-            </LinearLayout>
-            <Button
-                android:id="@+id/add_new_hometask_next_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="426dp"
-                android:textColor="@color/colorPrimaryText"
-                android:background="@drawable/accent_button_background"
-                android:text="Далее" />
-        </RelativeLayout>
-
-    </android.support.constraint.ConstraintLayout>
+        android:orientation="vertical"
+        android:id="@+id/add_hometask_table"
+        android:layout_height="wrap_content">
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_0"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_1"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_2"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_3"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_4"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_5"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_6"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_7"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_8"/>
+        <include
+            layout="@layout/choose_lesson_item"
+            android:id="@+id/lesson_choose_9"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/add_new_hometask_next_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:background="@drawable/accent_button_background"
+        android:text="Далее" />
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.user.homework;
+package com.example.user.homework.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,28 +9,28 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.user.homework.EditHometaskActivity;
+import com.example.user.homework.R;
+import com.example.user.homework.models.LessonModel;
 import java.util.ArrayList;
 
 public class LessonsListAdapter extends BaseAdapter {
-
-    private ArrayList<Lesson> lessons;
-
-
-    private String day = "", groupId = "";
+    private ArrayList<LessonModel> lessons;
+    private String day = "";
+    private String groupId = "";
     private Context context;
     private LayoutInflater layoutInflater;
     private boolean isAdmin = false;
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setAdmin() {
+        isAdmin = true;
     }
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
-    ArrayList<Lesson> getLessons() {
+    public ArrayList<LessonModel> getLessons() {
         return lessons;
     }
 
@@ -38,7 +38,7 @@ public class LessonsListAdapter extends BaseAdapter {
         this.day = day;
     }
 
-    LessonsListAdapter(ArrayList<Lesson> lessons, Context context) {
+    public LessonsListAdapter(ArrayList<LessonModel> lessons, Context context) {
         this.lessons = lessons;
         this.context = context;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -68,21 +68,19 @@ public class LessonsListAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.txt_lesson)).setText(lessons.get(i).getLesson());
         ((TextView) view.findViewById(R.id.txt_task)).setText(lessons.get(i).getHomework());
         final int x = i;
-        view.findViewById(R.id.btn_edit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isAdmin) {
-                    Intent intent = new Intent(context, EditHometaskActivity.class);
-                    intent.putExtra("Lesson", lessons.get(x).getLesson());
-                    intent.putExtra("Lesson number", lessons.get(x).getNumber());
-                    intent.putExtra("Day", day);
-                    intent.putExtra("GROUPID", groupId);
-                    Log.e("DAY_ADAPTER", day);
-                    context.startActivity(intent);
-                }
-                else {
-                    Toast.makeText(context, "Вы не администратор", Toast.LENGTH_SHORT).show();
-                }
+        view.findViewById(R.id.btn_edit).setOnClickListener(v -> {
+            if (isAdmin) {
+                Intent intent = new Intent(context, EditHometaskActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("LessonModel", lessons.get(x).getLesson());
+                intent.putExtra("LessonModel number", lessons.get(x).getNumber());
+                intent.putExtra("Day", day);
+                intent.putExtra("GROUPID", groupId);
+                Log.e("DAY_ADAPTER", day);
+                context.startActivity(intent);
+            }
+            else {
+                Toast.makeText(context, "Вы не администратор", Toast.LENGTH_SHORT).show();
             }
         });
         return view;

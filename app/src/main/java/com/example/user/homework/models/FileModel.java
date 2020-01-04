@@ -1,9 +1,9 @@
-package com.example.user.homework;
+package com.example.user.homework.models;
 
 public class FileModel {
-    String ref;
-    String name;
-    String uri;
+    private String ref;
+    private String name;
+    private String uri;
 
     public FileModel(String ref, String name, String uri) {
         this.ref = ref;
@@ -22,7 +22,7 @@ public class FileModel {
     public FileModel() {
     }
 
-    public String getRef() {
+    String getRef() {
         return ref;
     }
 
