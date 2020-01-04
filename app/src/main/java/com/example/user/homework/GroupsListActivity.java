@@ -6,11 +6,9 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.user.homework.adapters.GroupsAdapter;
 import com.example.user.homework.models.Group;
 import com.google.firebase.database.DataSnapshot;
@@ -66,7 +64,6 @@ public class GroupsListActivity extends AppCompatActivity {
             if (txtName != null) {
                 txtName.setText(user.getName() + " " + user.getSurname());
             }
-            Log.i("KEK", user.toString());
             List<String> groupsArray = user.getGroups();
             if (groupsArray == null) {
                 return;

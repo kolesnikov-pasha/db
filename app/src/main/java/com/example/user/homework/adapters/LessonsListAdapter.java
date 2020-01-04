@@ -2,7 +2,6 @@ package com.example.user.homework.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +75,6 @@ public class LessonsListAdapter extends BaseAdapter {
                 intent.putExtra("LessonModel number", lessons.get(x).getNumber());
                 intent.putExtra("Day", day);
                 intent.putExtra("GROUPID", groupId);
-                Log.e("DAY_ADAPTER", day);
                 context.startActivity(intent);
             }
             else {

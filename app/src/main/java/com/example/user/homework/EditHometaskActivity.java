@@ -3,13 +3,11 @@ package com.example.user.homework;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,8 +37,6 @@ public class EditHometaskActivity extends AppCompatActivity {
         number = bundle.getInt("LessonModel number");
         assert day != null;
         day = day.substring(0, 2) + day.substring(3, 5) + day.substring(6);
-        Log.e("DAY", day);
-        Log.e("NUMBER", number + "");
 
         edtHometask = findViewById(R.id.add_edt_task);
         TextView txtLesson = findViewById(R.id.chosen_lesson_name);
