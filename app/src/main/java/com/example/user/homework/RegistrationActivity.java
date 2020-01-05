@@ -5,46 +5,37 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
+import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.user.homework.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     private EditText edtNewPassword;
-    private EditText edtNewPasswordAgain;
     private EditText edtEmail;
     private EditText edtName;
     private EditText edtSurname;
 
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    String deleteSpaces(String str) {
-        while (str.length() > 0 && str.substring(str.length() - 1).equals(" ")) {
-            str = str.substring(0, str.length() - 1);
-        }
-        return str;
-    }
-
-    boolean emptyMessage(@NonNull final String str, @StringRes final int messageId){
+    private boolean emptyMessage(@NonNull final String str, @StringRes final int messageId){
         if (str.isEmpty()) {
-            Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, messageId, Toast.LENGTH_LONG).show();
             return true;
         }
         return false;
     }
 
     boolean check() {
-        final String email = deleteSpaces(edtEmail.getText().toString());
-        final String name = deleteSpaces(edtName.getText().toString());
-        final String surname = deleteSpaces(edtSurname.getText().toString());
+        final String email = edtEmail.getText().toString().trim();
+        final String name = edtName.getText().toString().trim();
+        final String surname = edtSurname.getText().toString().trim();
         edtEmail.setText(email);
         edtName.setText(name);
         edtSurname.setText(surname);
@@ -91,21 +82,24 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         edtEmail = findViewById(R.id.edt_email);
-        Button btnEndRegistration = findViewById(R.id.btn_end_registration);
         edtNewPassword = findViewById(R.id.edt_password);
         edtName = findViewById(R.id.edt_name);
         edtSurname = findViewById(R.id.edt_surname);
-        edtNewPasswordAgain = findViewById(R.id.edt_password_again);
 
         auth.signOut();
 
-        btnEndRegistration.setOnClickListener(v -> {
-            if (check()) {
-                if (edtNewPassword.getText().toString().equals(edtNewPasswordAgain.getText().toString())) {
-                    registration(edtEmail.getText().toString(), edtNewPassword.getText().toString());
-                } else {
-                    Toast.makeText(this, R.string.not_equal_passwords,Toast.LENGTH_SHORT).show();
-                }
+        findViewById(R.id.btn_end_registration).setOnClickListener(v -> {
+            if (!check()) {
+                return;
+            }
+            final EditText edtNewPasswordAgain = findViewById(R.id.edt_password_again);
+            final String password = edtNewPassword.getText().toString();
+            final String passwordAgain = edtNewPasswordAgain.getText().toString();
+            final String email = edtEmail.getText().toString();
+            if (TextUtils.equals(password, passwordAgain)) {
+                registration(email, password);
+            } else {
+                Toast.makeText(this, R.string.not_equal_passwords,Toast.LENGTH_SHORT).show();
             }
         });
 
