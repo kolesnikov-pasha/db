@@ -143,7 +143,7 @@ public class GroupViewActivity extends AppCompatActivity{
                 startActivity(intent);
                 return true;
             }
-            Toast.makeText(getApplicationContext(), "Вы не администратор группы", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
             mDrawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });

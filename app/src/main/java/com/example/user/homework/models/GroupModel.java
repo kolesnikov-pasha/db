@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
-public class Group implements Comparable<Group>{
+public class GroupModel implements Comparable<GroupModel>{
     private String name = "";
     private String id = "";
     private String password = "";
@@ -42,9 +42,9 @@ public class Group implements Comparable<Group>{
         this.id = id;
     }
 
-    public Group() {}
+    public GroupModel() {}
 
-    public Group(String name, String id, String password, ArrayList<String> admin) {
+    public GroupModel(String name, String id, String password, ArrayList<String> admin) {
         this.name = name;
         this.id = id;
         this.password = password;
@@ -52,7 +52,7 @@ public class Group implements Comparable<Group>{
     }
 
     @Override
-    public int compareTo(@NonNull Group o) {
+    public int compareTo(@NonNull GroupModel o) {
         return id.compareTo(o.id);
     }
 }

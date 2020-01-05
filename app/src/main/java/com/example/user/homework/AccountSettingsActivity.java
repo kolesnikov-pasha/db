@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import java.util.Objects;
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
@@ -43,11 +42,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private void changeUserInformation() {
         reference.child("users").child(uid).child("userInformation").child("name").setValue(edtNewName.getText().toString());
         reference.child("users").child(uid).child("userInformation").child("surname").setValue(edtNewSurname.getText().toString());
-        Toast.makeText(getApplicationContext(), "Данные успешно изменены", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.data_changed_successfully, Toast.LENGTH_SHORT).show();
     }
 
     private void exit() {
-        Toast.makeText(getApplicationContext(), "Вы вышли из аккаунта!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.logout, Toast.LENGTH_SHORT).show();
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
         intent.putExtra("SIGNOUT", true);
@@ -64,22 +63,25 @@ public class AccountSettingsActivity extends AppCompatActivity {
             final FirebaseAuth auth = FirebaseAuth.getInstance();
             final String email = user.getEmail();
             final String oldPassword = String.valueOf(edtOldPass.getText());
+            if (email == null) {
+                return;
+            }
             auth.signInWithEmailAndPassword(email, oldPassword).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     user.updatePassword(password).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Пароль успешно изменен", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.password_cahnged_successfully, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Попробуйте другой пароль", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.try_another_password, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
-                    Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                 }
             });
         }
         else {
-            Toast.makeText(getApplicationContext(), "Введенные пароли не совпадают", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.not_equal_passwords, Toast.LENGTH_SHORT).show();
         }
     }
 }

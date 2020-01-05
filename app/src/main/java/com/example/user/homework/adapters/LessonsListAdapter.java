@@ -78,7 +78,7 @@ public class LessonsListAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
             else {
-                Toast.makeText(context, "Вы не администратор", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.not_admin, Toast.LENGTH_SHORT).show();
             }
         });
         return view;

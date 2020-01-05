@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.user.homework.models.Group;
-import com.example.user.homework.models.User;
+import com.example.user.homework.models.GroupModel;
+import com.example.user.homework.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +24,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String uid = Objects.requireNonNull(user).getUid();
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("userInformation");
-    private User currentUser = null;
+    private UserModel currentUserModel = null;
 
     private EditText edtName, edtPassword;
 
@@ -37,25 +37,29 @@ public class CreateGroupActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.et_group_password);
         edtName = findViewById(R.id.et_group_name);
 
-        ((HomeworkApplication) getApplication()).addUserListener(user -> currentUser = user);
+        ((HomeworkApplication) getApplication()).addUserListener(userModel -> currentUserModel = userModel);
 
         btnCreate.setOnClickListener(v -> {
-            final int count = currentUser.getCreateCount();
+            final int count = currentUserModel.getCreateCount();
             final String groupName = edtName.getText().toString();
             final String groupPassword = edtPassword.getText().toString();
             final String groupId = count + uid;
-            if (TextUtils.isEmpty(groupName) || TextUtils.isEmpty(groupPassword)) {
-                Toast.makeText(getApplicationContext(), "Введите пароль и имя группы", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(groupPassword)) {
+                Toast.makeText(this, R.string.not_entered_password, Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (currentUser != null) {
-                final Group group = new Group(
+            if (TextUtils.isEmpty(groupName)) {
+                Toast.makeText(this, R.string.not_entered_group_name, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (currentUserModel != null) {
+                final GroupModel groupModel = new GroupModel(
                     groupName,
                     groupId,
                     groupPassword,
                     new ArrayList<>(Collections.singletonList(uid)));
-                FirebaseDatabase.getInstance().getReference().child(groupId).setValue(group);
-                reference.child("groups").child(String.valueOf(count)).setValue(groupId);
+                FirebaseDatabase.getInstance().getReference().child(groupId).setValue(groupModel);
+                reference.child("groupModels").child(String.valueOf(count)).setValue(groupId);
                 reference.child("createCount").setValue(count + 1);
                 Intent intent = new Intent(getApplicationContext(), GroupViewActivity.class);
                 intent.putExtra("GROUPID", groupId);

@@ -19,18 +19,15 @@ public class PasswordResetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_password_remaind);
         Button btnReset = findViewById(R.id.btn_start_reset);
         edtEmail = findViewById(R.id.edt_email_for_password_reset);
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                String email = edtEmail.getText().toString();
-                while (email.contains(" ")){
-                    email = email.substring(0, email.indexOf(" "));
-                }
-                System.out.println(email);
-                auth.sendPasswordResetEmail(email);
-                Toast.makeText(getApplicationContext(), "Перейдите по ссылке в письме", Toast.LENGTH_SHORT).show();
+        btnReset.setOnClickListener(v -> {
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            String email = edtEmail.getText().toString();
+            while (email.contains(" ")){
+                email = email.substring(0, email.indexOf(" "));
             }
+            System.out.println(email);
+            auth.sendPasswordResetEmail(email);
+            Toast.makeText(this, R.string.confirm_your_email, Toast.LENGTH_SHORT).show();
         });
     }
 }

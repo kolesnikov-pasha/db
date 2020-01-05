@@ -1,6 +1,5 @@
 package com.example.user.homework;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,12 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -149,7 +146,6 @@ public class AddNewTaskActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private void update(){
         for (int j = 0; j < 10; j++) {
             ((TextView) lessonsView[j].findViewById(R.id.lesson_number)).setText(j + ".");
@@ -190,9 +186,8 @@ public class AddNewTaskActivity extends AppCompatActivity {
         txtDate.setText(res);
     }
 
-    final String daysOfWeek[] = new String[]{"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"};
-
     public void changeDayOfWeek(int WeekDay){
+        final String[] daysOfWeek = getResources().getStringArray(R.array.days_of_week);
         txtDayOfWeek.setText(daysOfWeek[WeekDay - 1]);
     }
 
@@ -207,7 +202,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(getApplicationContext(), "Проверьте интернет соединение", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
                 }
             });
         }

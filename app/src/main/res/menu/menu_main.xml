@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <groupModel android:checkableBehavior="single">
         <item
             android:id="@+id/menu_account_settings"
             android:title="В главное меню"
@@ -16,6 +16,6 @@
             android:id="@+id/menu_edit"
             android:icon="@drawable/baseline_edit_black_48dp"
             android:title="Редактировать класс"/>
-    </group>
+    </groupModel>
 
 </menu>

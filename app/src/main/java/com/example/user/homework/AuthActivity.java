@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -21,43 +21,44 @@ public class AuthActivity extends AppCompatActivity {
     private EditText edtPassword;
     private SharedPreferences sharedPreferences;
 
-    protected void signing(final String email, final String password){
-        if (email.isEmpty()) Toast.makeText(this, "Email не введен", Toast.LENGTH_SHORT).show();
-        else if (password.isEmpty()) Toast.makeText(this, "Пароль не введен", Toast.LENGTH_SHORT).show();
-        else {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
-                if (task.isSuccessful()){
-                    sharedPreferences = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("EMAIL", email);
-                    editor.putString("PASSWORD", password);
-                    editor.apply();
-                    user = mAuth.getCurrentUser();
-                    assert user != null;
-                    if (user.isEmailVerified()) {
-                        Toast.makeText(AuthActivity.this, "Добро пожаловать", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(AuthActivity.this, GroupsListActivity.class);
-                        startActivity(intent);
-                    }
-                    else {
-                        Toast.makeText(AuthActivity.this, "Ваш email не подтвержден, перейдите по ссылке в письме", Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    Toast.makeText(AuthActivity.this, "Ошибка входа", Toast.LENGTH_SHORT).show();
-                    edtPassword.setText("");
-                }
-            });
+    private void signing(final String email, final String password){
+        if (email.isEmpty()) {
+            Toast.makeText(this, R.string.not_entered_email, Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (password.isEmpty()) {
+            Toast.makeText(this, R.string.not_entered_password, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+            if (!task.isSuccessful()) {
+                Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
+                edtPassword.setText("");
+                return;
+            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("EMAIL", email);
+            editor.putString("PASSWORD", password);
+            editor.apply();
+            user = mAuth.getCurrentUser();
+            if (user == null || !user.isEmailVerified()) {
+                Toast.makeText(this, R.string.confirm_your_email, Toast.LENGTH_LONG).show();
+                return;
+            }
+            Toast.makeText(this, R.string.welcome, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AuthActivity.this, GroupsListActivity.class);
+            startActivity(intent);
+        });
     }
 
-    protected void defaultSigning(final String email, final String password){
+    private void defaultSigning(final String email, final String password){
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()){
                 user = mAuth.getCurrentUser();
                 assert user != null;
                 if (user.isEmailVerified()) {
-                    Toast.makeText(AuthActivity.this, "Добро пожаловать", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AuthActivity.this, GroupsListActivity.class);
+                    Toast.makeText(this, R.string.welcome, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, GroupsListActivity.class);
                     startActivity(intent);
                 }
             }
@@ -85,7 +86,7 @@ public class AuthActivity extends AppCompatActivity {
         String email = sharedPreferences.getString("EMAIL", "");
         String password = sharedPreferences.getString("PASSWORD", "");
 
-        if (password != null && email != null && !email.isEmpty() && !password.isEmpty()) {
+        if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(email)) {
             defaultSigning(email, password);
         }
 
@@ -95,8 +96,8 @@ public class AuthActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.et_email);
         edtPassword = findViewById(R.id.et_password);
 
-        txtPassRemind.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), PasswordResetActivity.class)));
-        txtRegistration.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), RegistrationActivity.class)));
+        txtPassRemind.setOnClickListener(view -> startActivity(new Intent(this, PasswordResetActivity.class)));
+        txtRegistration.setOnClickListener(view -> startActivity(new Intent(this, RegistrationActivity.class)));
         signIn.setOnClickListener(view -> signing(edtEmail.getText().toString(), edtPassword.getText().toString()));
     }
 

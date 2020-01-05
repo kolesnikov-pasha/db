@@ -45,11 +45,8 @@ public class SearchAdapter extends BaseAdapter {
         if (view == null){
             view = inflater.inflate(R.layout.group_view, parent, false);
         }
-        if (view != null) {
-            ((TextView) view.findViewById(R.id.txt_group_view_uid)).setText(groups.get(position).getUid());
-            ((TextView) view.findViewById(R.id.txt_group_view_name)).setText(groups.get(position).getName());
-        }
-        assert view != null;
+        ((TextView) view.findViewById(R.id.txt_group_view_uid)).setText(groups.get(position).getUid());
+        ((TextView) view.findViewById(R.id.txt_group_view_name)).setText(groups.get(position).getName());
         view.setOnClickListener(v -> {
             Intent intent = new Intent(context, GroupPasswordActivity.class);
             intent.putExtra("NAME", groups.get(position).getName());

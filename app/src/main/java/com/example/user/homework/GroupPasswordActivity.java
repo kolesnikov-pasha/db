@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,9 +24,9 @@ public class GroupPasswordActivity extends AppCompatActivity {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     void addGroup(){
-        reference.child("groups").child(number + "").child("name").setValue(name);
-        reference.child("groups").child(number + "").child("id").setValue(id);
-        reference.child("groups").child(number + "").child("password").setValue(truePassword);
+        reference.child("groupModels").child(number + "").child("name").setValue(name);
+        reference.child("groupModels").child(number + "").child("id").setValue(id);
+        reference.child("groupModels").child(number + "").child("password").setValue(truePassword);
         reference.child("createCount").setValue(number + 1);
     }
 
@@ -36,14 +35,20 @@ public class GroupPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_password);
 
-        name = getIntent().getExtras().getString("NAME");
-        id = getIntent().getExtras().getString("UID");
+        final Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            return;
+        }
+        name = bundle.getString("NAME");
+        id = bundle.getString("UID");
 
         txtName = findViewById(R.id.txt_group_name_password);
         btnSignIn = findViewById(R.id.btn_sign_in_password);
         edtPassword = findViewById(R.id.edt_group_password);
 
-        txtName.setText("Пароль для группы \n" + name + ":");
+        txtName.setText(
+            getString(R.string.password_for_group).replace(getString(R.string.name_placeholder), name)
+        );
 
         reference = reference.child("users").child(userId).child("userInformation");
         reference.child("createCount").addValueEventListener(new ValueEventListener() {
@@ -55,7 +60,7 @@ public class GroupPasswordActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
             }
         });
         reference.child(id).child("Password").addValueEventListener(new ValueEventListener() {
@@ -67,7 +72,7 @@ public class GroupPasswordActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -77,7 +82,7 @@ public class GroupPasswordActivity extends AppCompatActivity {
                     addGroup();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                 }
             }
         });

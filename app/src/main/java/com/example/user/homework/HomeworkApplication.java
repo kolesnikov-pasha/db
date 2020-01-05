@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.example.user.homework.listeners.GroupListener;
 import com.example.user.homework.listeners.UserListener;
-import com.example.user.homework.models.User;
+import com.example.user.homework.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class HomeworkApplication extends Application implements ValueEventListener {
     @Nullable
-    private User user;
+    private UserModel userModel;
     @Nullable
     private List<String> groupsId;
     @NonNull
@@ -28,8 +28,8 @@ public class HomeworkApplication extends Application implements ValueEventListen
 
     public void addUserListener(@NonNull final UserListener userListener) {
         userListeners.add(userListener);
-        if (user != null) {
-            userListener.onUserUpdate(user);
+        if (userModel != null) {
+            userListener.onUserUpdate(userModel);
         }
     }
 
@@ -41,29 +41,29 @@ public class HomeworkApplication extends Application implements ValueEventListen
     }
 
     private void updateUser(DataSnapshot dataSnapshot) {
-        if (user == null) {
-            user = new User();
+        if (userModel == null) {
+            userModel = new UserModel();
         }
         for (DataSnapshot child: dataSnapshot.getChildren()) {
             switch (child.getKey()) {
                 case "createCount":
-                    user.setCreateCount(child.getValue(Integer.class));
+                    userModel.setCreateCount(child.getValue(Integer.class));
                     break;
                 case "surname":
-                    user.setSurname((String) child.getValue());
+                    userModel.setSurname((String) child.getValue());
                     break;
                 case "name":
-                    user.setName((String) child.getValue());
+                    userModel.setName((String) child.getValue());
                     break;
                 case "email":
-                    user.setEmail((String) child.getValue());
+                    userModel.setEmail((String) child.getValue());
                     break;
-                case "groups":
-                    user.setGroups((List<String>) child.getValue());
+                case "groupModels":
+                    userModel.setGroups((List<String>) child.getValue());
             }
         }
         for (final UserListener listener: userListeners) {
-            listener.onUserUpdate(user);
+            listener.onUserUpdate(userModel);
         }
     }
 
@@ -84,7 +84,7 @@ public class HomeworkApplication extends Application implements ValueEventListen
             }
             final DatabaseReference rootReference = FirebaseDatabase.getInstance().getReference();
             final DatabaseReference userReference = rootReference.child("users").child(currentUser.getUid()).child("userInformation");
-            final DatabaseReference groupsReference = rootReference.child("groups");
+            final DatabaseReference groupsReference = rootReference.child("groupModels");
             groupsReference.addValueEventListener(this);
             userReference.addValueEventListener(this);
         });

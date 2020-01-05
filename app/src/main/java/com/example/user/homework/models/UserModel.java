@@ -3,16 +3,16 @@ package com.example.user.homework.models;
 import java.io.Serializable;
 import java.util.List;
 
-public class User implements Serializable {
+public class UserModel implements Serializable {
     private String name;
     private String surname;
     private String email;
     private List<String> groups;
     private int createCount;
 
-    public User() {}
+    public UserModel() {}
 
-    public User(String name, String surname, String email, List<String> groups, int createCount) {
+    public UserModel(String name, String surname, String email, List<String> groups, int createCount) {
         this.name = name;
         this.surname = surname;
         this.email = email;

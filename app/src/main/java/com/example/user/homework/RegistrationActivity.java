@@ -2,12 +2,13 @@ package com.example.user.homework;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.user.homework.models.User;
+import com.example.user.homework.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -16,8 +17,11 @@ import java.util.ArrayList;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    Button btnEndRegistration;
-    EditText edtNewPassword, edtNewPasswordAgain, edtEmail, edtName, edtSurname;
+    private EditText edtNewPassword;
+    private EditText edtNewPasswordAgain;
+    private EditText edtEmail;
+    private EditText edtName;
+    private EditText edtSurname;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -29,55 +33,55 @@ public class RegistrationActivity extends AppCompatActivity {
         return str;
     }
 
-    boolean emptyMessage(String str,String message){
+    boolean emptyMessage(@NonNull final String str, @StringRes final int messageId){
         if (str.isEmpty()) {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_LONG).show();
             return true;
         }
         return false;
     }
 
     boolean check() {
-        String email = deleteSpaces(edtEmail.getText().toString());
-        String name = deleteSpaces(edtName.getText().toString());
-        String surname = deleteSpaces(edtSurname.getText().toString());
+        final String email = deleteSpaces(edtEmail.getText().toString());
+        final String name = deleteSpaces(edtName.getText().toString());
+        final String surname = deleteSpaces(edtSurname.getText().toString());
         edtEmail.setText(email);
         edtName.setText(name);
         edtSurname.setText(surname);
-        if (emptyMessage(email, "Email не введен")) {
+        if (emptyMessage(email, R.string.not_entered_email)) {
             return false;
         }
-        if (emptyMessage(name, "Имя не введено")) {
+        if (emptyMessage(name, R.string.not_entered_name)) {
             return false;
         }
-        if (emptyMessage(surname, "Фамилия не введена")) {
+        if (emptyMessage(surname, R.string.not_entered_surname)) {
             return false;
         }
         return true;
     }
 
-    void registration(final String email, String password){
+    void registration(final String email, final String password){
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getParent(), task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                FirebaseUser user = auth.getCurrentUser();
-                String uid = user.getUid();
-                database.getReference().child("users").child(uid).child("userInformation")
-                        .setValue(new User(edtName.getText().toString(),
-                                edtSurname.getText().toString(), email, new ArrayList<>(), 0));
-                user.sendEmailVerification().addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()){
-                        Toast.makeText(getApplicationContext(), "На адрес " + email +
-                                " выслано письмо для подтверждения регистрации", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Отправить письмо для подтверждения " +
-                                "регистрации не получилось", Toast.LENGTH_LONG).show();
-                    }
-                });
-            } else {
-                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+            if (!task.isSuccessful()) {
+                Toast.makeText(this, R.string.registration_error, Toast.LENGTH_SHORT).show();
+                return;
             }
+            final FirebaseUser user = auth.getCurrentUser();
+            if (user == null) {
+                return;
+            }
+            final String uid = user.getUid();
+            database.getReference().child("users").child(uid).child("userInformation")
+                    .setValue(new UserModel(edtName.getText().toString(),
+                            edtSurname.getText().toString(), email, new ArrayList<>(), 0));
+            user.sendEmailVerification().addOnCompleteListener(task1 -> {
+                if (!task1.isSuccessful()) {
+                    Toast.makeText(this, R.string.registration_error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(this, R.string.send_confirmation_letter, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, AuthActivity.class));
+            });
         });
     }
 
@@ -87,7 +91,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         edtEmail = findViewById(R.id.edt_email);
-        btnEndRegistration = findViewById(R.id.btn_end_registration);
+        Button btnEndRegistration = findViewById(R.id.btn_end_registration);
         edtNewPassword = findViewById(R.id.edt_password);
         edtName = findViewById(R.id.edt_name);
         edtSurname = findViewById(R.id.edt_surname);
@@ -100,7 +104,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 if (edtNewPassword.getText().toString().equals(edtNewPasswordAgain.getText().toString())) {
                     registration(edtEmail.getText().toString(), edtNewPassword.getText().toString());
                 } else {
-                    Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.not_equal_passwords,Toast.LENGTH_SHORT).show();
                 }
             }
         });

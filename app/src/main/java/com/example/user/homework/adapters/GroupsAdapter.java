@@ -10,29 +10,29 @@ import android.widget.TextView;
 
 import com.example.user.homework.GroupViewActivity;
 import com.example.user.homework.R;
-import com.example.user.homework.models.Group;
+import com.example.user.homework.models.GroupModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class GroupsAdapter extends BaseAdapter {
-    private List<Group> groups = new ArrayList<>();
+    private List<GroupModel> groupModels = new ArrayList<>();
 
-    public GroupsAdapter(Collection<Group> groups) {
-        if (groups != null) {
-            this.groups = new ArrayList<>(groups);
+    public GroupsAdapter(Collection<GroupModel> groupModels) {
+        if (groupModels != null) {
+            this.groupModels = new ArrayList<>(groupModels);
         }
     }
 
     @Override
     public int getCount() {
-        return groups.size();
+        return groupModels.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return groups.get(position);
+        return groupModels.get(position);
     }
 
     @Override
@@ -46,10 +46,10 @@ public class GroupsAdapter extends BaseAdapter {
         if (view == null){
             view = LayoutInflater.from(context).inflate(R.layout.groups_list_item, parent, false);
         }
-        ((TextView) view.findViewById(R.id.txt_item_name)).setText(groups.get(position).getName());
+        ((TextView) view.findViewById(R.id.txt_item_name)).setText(groupModels.get(position).getName());
         view.setOnClickListener(v -> {
             Intent intent = new Intent(context, GroupViewActivity.class);
-            intent.putExtra("GROUPID", groups.get(position).getId());
+            intent.putExtra("GROUPID", groupModels.get(position).getId());
             context.startActivity(intent);
         });
         return view;

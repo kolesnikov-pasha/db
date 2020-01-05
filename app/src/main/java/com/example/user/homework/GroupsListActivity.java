@@ -9,8 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.user.homework.adapters.GroupsAdapter;
-import com.example.user.homework.models.Group;
+import com.example.user.homework.models.GroupModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +28,7 @@ public class GroupsListActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     NavigationView navigationView;
     TextView txtName;
-    Set<Group> groups = new TreeSet<>();
+    Set<GroupModel> groupModels = new TreeSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +74,14 @@ public class GroupsListActivity extends AppCompatActivity {
                 groupReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        groups.add(dataSnapshot.getValue(Group.class));
-                        listView.setAdapter(new GroupsAdapter(groups));
+                        groupModels.add(dataSnapshot.getValue(GroupModel.class));
+                        listView.setAdapter(new GroupsAdapter(groupModels));
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         });

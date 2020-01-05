@@ -29,13 +29,17 @@ public class EditHometaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_hometask);
 
         Bundle bundle = getIntent().getExtras();
-        assert bundle != null;
+        if (bundle == null) {
+            return;
+        }
         String lesson = bundle.getString("LessonModel");
         groupId = bundle.getString("GROUPID");
         assert groupId != null;
         String day = bundle.getString("Day");
         number = bundle.getInt("LessonModel number");
-        assert day != null;
+        if (day == null) {
+            return;
+        }
         day = day.substring(0, 2) + day.substring(3, 5) + day.substring(6);
 
         edtHometask = findViewById(R.id.add_edt_task);
@@ -69,11 +73,11 @@ public class EditHometaskActivity extends AppCompatActivity {
         });
         btnAdd.setOnClickListener(v -> {
             String task = edtHometask.getText().toString();
-            if (number == -1) Toast.makeText(getApplicationContext(), "Предмет не выбран", Toast.LENGTH_SHORT).show();
+            if (number == -1) Toast.makeText(this, R.string.not_chosen_lesson, Toast.LENGTH_SHORT).show();
             else {
                 reference.setValue(task);
-                Toast.makeText(getApplicationContext(), "Задание добавлено", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), GroupViewActivity.class);
+                Toast.makeText(this, R.string.task_added, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, GroupViewActivity.class);
                 intent.putExtra("GROUPID", groupId);
                 startActivityForResult(intent, 0);
             }

@@ -87,7 +87,7 @@ public class SearchActivity extends AppCompatActivity {
     ImageButton button;
     ArrayList<SearchGroupModel> list = new ArrayList<>();
     ArrayList<SearchGroupModel> adapterList = new ArrayList<>();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("groups");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("groupModels");
 
 
 
