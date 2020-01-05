@@ -14,10 +14,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.user.homework.adapters.LessonsListAdapter;
 import com.example.user.homework.models.LessonModel;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TreeSet;
@@ -143,7 +141,7 @@ public class GroupViewActivity extends AppCompatActivity{
                 startActivity(intent);
                 return true;
             }
-            Toast.makeText(this, R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
+            UiUtils.say(this, R.string.check_internet_connection);
             mDrawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });

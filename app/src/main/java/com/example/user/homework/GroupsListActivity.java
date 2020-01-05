@@ -9,15 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.user.homework.adapters.GroupsAdapter;
 import com.example.user.homework.models.GroupModel;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -80,7 +79,7 @@ public class GroupsListActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
+                        UiUtils.say(getApplicationContext(), R.string.check_internet_connection);
                     }
                 });
             }

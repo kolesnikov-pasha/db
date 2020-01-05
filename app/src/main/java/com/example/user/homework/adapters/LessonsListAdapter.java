@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.user.homework.EditHometaskActivity;
 import com.example.user.homework.R;
 import com.example.user.homework.models.LessonModel;
+import com.example.user.homework.utils.UiUtils;
 import java.util.ArrayList;
 
 public class LessonsListAdapter extends BaseAdapter {
@@ -78,7 +78,7 @@ public class LessonsListAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
             else {
-                Toast.makeText(context, R.string.not_admin, Toast.LENGTH_SHORT).show();
+                UiUtils.say(context, R.string.not_admin);
             }
         });
         return view;

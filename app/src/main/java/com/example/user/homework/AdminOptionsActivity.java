@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -92,7 +92,7 @@ public class AdminOptionsActivity extends AppCompatActivity {
                 reference.child("lessonsSchedule").child(daySelectedNow).child(i + "").setValue(schedule[i]);
             }
             reference.child("Name").setValue(edtChangeName.getText().toString());
-            Toast.makeText(getApplicationContext(), R.string.changes_saved, Toast.LENGTH_SHORT).show();
+            UiUtils.say(getApplicationContext(), R.string.changes_saved);
         });
         findViewById(R.id.add_bar_home).setOnClickListener(view -> {
             final Intent intent = new Intent(this, GroupViewActivity.class);

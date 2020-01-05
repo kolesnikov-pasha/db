@@ -6,16 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import com.example.user.homework.models.GroupModel;
 import com.example.user.homework.models.UserModel;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -45,11 +42,11 @@ public class CreateGroupActivity extends AppCompatActivity {
             final String groupPassword = edtPassword.getText().toString();
             final String groupId = count + uid;
             if (TextUtils.isEmpty(groupPassword)) {
-                Toast.makeText(this, R.string.not_entered_password, Toast.LENGTH_SHORT).show();
+                UiUtils.say(this, R.string.not_entered_password);
                 return;
             }
             if (TextUtils.isEmpty(groupName)) {
-                Toast.makeText(this, R.string.not_entered_group_name, Toast.LENGTH_SHORT).show();
+                UiUtils.say(this, R.string.not_entered_group_name);
                 return;
             }
             if (currentUserModel != null) {
@@ -57,7 +54,8 @@ public class CreateGroupActivity extends AppCompatActivity {
                     groupName,
                     groupId,
                     groupPassword,
-                    new ArrayList<>(Collections.singletonList(uid)));
+                    Collections.singletonList(uid)
+                );
                 FirebaseDatabase.getInstance().getReference().child(groupId).setValue(groupModel);
                 reference.child("groupModels").child(String.valueOf(count)).setValue(groupId);
                 reference.child("createCount").setValue(count + 1);

@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -73,14 +73,16 @@ public class EditHometaskActivity extends AppCompatActivity {
         });
         btnAdd.setOnClickListener(v -> {
             String task = edtHometask.getText().toString();
-            if (number == -1) Toast.makeText(this, R.string.not_chosen_lesson, Toast.LENGTH_SHORT).show();
-            else {
-                reference.setValue(task);
-                Toast.makeText(this, R.string.task_added, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, GroupViewActivity.class);
-                intent.putExtra("GROUPID", groupId);
-                startActivityForResult(intent, 0);
+            if (number == -1) {
+                UiUtils.say(this, R.string.not_chosen_lesson);
+                return;
             }
+            reference.setValue(task);
+            UiUtils.say(this, R.string.task_added);
+            Intent intent = new Intent(this, GroupViewActivity.class);
+            intent.putExtra("GROUPID", groupId);
+            startActivityForResult(intent, 0);
+
         });
         btnAddAttachments.setOnClickListener(v -> {
             Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);

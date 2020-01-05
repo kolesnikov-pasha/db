@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,16 +23,16 @@ public class AuthActivity extends AppCompatActivity {
 
     private void signing(final String email, final String password){
         if (email.isEmpty()) {
-            Toast.makeText(this, R.string.not_entered_email, Toast.LENGTH_SHORT).show();
+            UiUtils.say(this, R.string.not_entered_email);
             return;
         }
         if (password.isEmpty()) {
-            Toast.makeText(this, R.string.not_entered_password, Toast.LENGTH_SHORT).show();
+            UiUtils.say(this, R.string.not_entered_password);
             return;
         }
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if (!task.isSuccessful()) {
-                Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
+                UiUtils.say(this, R.string.auth_error);
                 edtPassword.setText("");
                 return;
             }
@@ -42,10 +42,10 @@ public class AuthActivity extends AppCompatActivity {
             editor.apply();
             user = mAuth.getCurrentUser();
             if (user == null || !user.isEmailVerified()) {
-                Toast.makeText(this, R.string.confirm_your_email, Toast.LENGTH_LONG).show();
+                UiUtils.say(this, R.string.confirm_your_email);
                 return;
             }
-            Toast.makeText(this, R.string.welcome, Toast.LENGTH_SHORT).show();
+            UiUtils.say(this, R.string.welcome);
             Intent intent = new Intent(AuthActivity.this, GroupsListActivity.class);
             startActivity(intent);
         });
@@ -57,7 +57,7 @@ public class AuthActivity extends AppCompatActivity {
                 user = mAuth.getCurrentUser();
                 assert user != null;
                 if (user.isEmailVerified()) {
-                    Toast.makeText(this, R.string.welcome, Toast.LENGTH_SHORT).show();
+                    UiUtils.say(this, R.string.welcome);
                     Intent intent = new Intent(this, GroupsListActivity.class);
                     startActivity(intent);
                 }

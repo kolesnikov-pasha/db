@@ -7,8 +7,8 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.Toast;
 import com.example.user.homework.models.UserModel;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -26,7 +26,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private boolean emptyMessage(@NonNull final String str, @StringRes final int messageId){
         if (str.isEmpty()) {
-            Toast.makeText(this, messageId, Toast.LENGTH_LONG).show();
+            UiUtils.say(this, messageId);
             return true;
         }
         return false;
@@ -54,7 +54,7 @@ public class RegistrationActivity extends AppCompatActivity {
     void registration(final String email, final String password){
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getParent(), task -> {
             if (!task.isSuccessful()) {
-                Toast.makeText(this, R.string.registration_error, Toast.LENGTH_SHORT).show();
+                UiUtils.say(this, R.string.registration_error);
                 return;
             }
             final FirebaseUser user = auth.getCurrentUser();
@@ -67,10 +67,10 @@ public class RegistrationActivity extends AppCompatActivity {
                             edtSurname.getText().toString(), email, new ArrayList<>(), 0));
             user.sendEmailVerification().addOnCompleteListener(task1 -> {
                 if (!task1.isSuccessful()) {
-                    Toast.makeText(this, R.string.registration_error, Toast.LENGTH_SHORT).show();
+                    UiUtils.say(this, R.string.registration_error);
                     return;
                 }
-                Toast.makeText(this, R.string.send_confirmation_letter, Toast.LENGTH_SHORT).show();
+                UiUtils.say(this, R.string.send_confirmation_letter);
                 startActivity(new Intent(this, AuthActivity.class));
             });
         });
@@ -99,7 +99,7 @@ public class RegistrationActivity extends AppCompatActivity {
             if (TextUtils.equals(password, passwordAgain)) {
                 registration(email, password);
             } else {
-                Toast.makeText(this, R.string.not_equal_passwords,Toast.LENGTH_SHORT).show();
+                UiUtils.say(this, R.string.not_equal_passwords);
             }
         });
 

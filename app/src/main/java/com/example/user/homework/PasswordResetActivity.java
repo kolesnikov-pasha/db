@@ -2,11 +2,9 @@ package com.example.user.homework;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class PasswordResetActivity extends AppCompatActivity {
@@ -27,7 +25,7 @@ public class PasswordResetActivity extends AppCompatActivity {
             }
             System.out.println(email);
             auth.sendPasswordResetEmail(email);
-            Toast.makeText(this, R.string.confirm_your_email, Toast.LENGTH_SHORT).show();
+            UiUtils.say(this, R.string.confirm_your_email);
         });
     }
 }

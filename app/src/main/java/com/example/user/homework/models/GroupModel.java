@@ -1,20 +1,20 @@
 package com.example.user.homework.models;
 
 import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class GroupModel implements Comparable<GroupModel>{
     private String name = "";
     private String id = "";
     private String password = "";
-    private ArrayList<String> admin = new ArrayList<>();
+    private List<String> admin = new ArrayList<>();
 
-    public ArrayList<String> getAdmin() {
+    public List<String> getAdmin() {
         return admin;
     }
 
-    public void setAdmin(ArrayList<String> admin) {
+    public void setAdmin(List<String> admin) {
         this.admin = admin;
     }
 
@@ -44,7 +44,7 @@ public class GroupModel implements Comparable<GroupModel>{
 
     public GroupModel() {}
 
-    public GroupModel(String name, String id, String password, ArrayList<String> admin) {
+    public GroupModel(String name, String id, String password, List<String> admin) {
         this.name = name;
         this.id = id;
         this.password = password;

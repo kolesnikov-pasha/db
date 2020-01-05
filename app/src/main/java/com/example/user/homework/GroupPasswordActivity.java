@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.example.user.homework.utils.UiUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,12 +55,11 @@ public class GroupPasswordActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 number = dataSnapshot.getValue(Integer.class);
-                System.out.println(number);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
+                UiUtils.say(getApplicationContext(), R.string.check_internet_connection);
             }
         });
         reference.child(id).child("Password").addValueEventListener(new ValueEventListener() {
@@ -72,7 +71,7 @@ public class GroupPasswordActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
+                UiUtils.say(getApplicationContext(), R.string.check_internet_connection);
             }
         });
 
@@ -82,7 +81,7 @@ public class GroupPasswordActivity extends AppCompatActivity {
                     addGroup();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                    UiUtils.say(getApplicationContext(), R.string.wrong_password);
                 }
             }
         });
