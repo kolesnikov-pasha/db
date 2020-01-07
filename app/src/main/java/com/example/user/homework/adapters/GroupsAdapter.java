@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.user.homework.GroupViewActivity;
 import com.example.user.homework.R;
 import com.example.user.homework.models.GroupModel;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -58,7 +58,7 @@ public class HomeworkApplication extends Application implements ValueEventListen
                 case "email":
                     userModel.setEmail((String) child.getValue());
                     break;
-                case "groupModels":
+                case "groups":
                     userModel.setGroups((List<String>) child.getValue());
             }
         }
@@ -84,7 +84,7 @@ public class HomeworkApplication extends Application implements ValueEventListen
             }
             final DatabaseReference rootReference = FirebaseDatabase.getInstance().getReference();
             final DatabaseReference userReference = rootReference.child("users").child(currentUser.getUid()).child("userInformation");
-            final DatabaseReference groupsReference = rootReference.child("groupModels");
+            final DatabaseReference groupsReference = rootReference.child("groups");
             groupsReference.addValueEventListener(this);
             userReference.addValueEventListener(this);
         });
